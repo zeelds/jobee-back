@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Girl-React/jobee-back/issues"
   },
-  "homepage": "https://github.com/Girl-React/jobee-back#readme"
+  "homepage": "https://github.com/Girl-React/jobee-back#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }

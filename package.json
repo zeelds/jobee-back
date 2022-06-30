@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/Girl-React/jobee-back#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.21.2"
   }
 }

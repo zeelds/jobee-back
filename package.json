@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/Girl-React/jobee-back.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Girl React",
+  "license": "GPLv3",
   "bugs": {
     "url": "https://github.com/Girl-React/jobee-back/issues"
   },

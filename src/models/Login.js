@@ -26,3 +26,5 @@ const Login = database.define("Login", {
         referencesKey: '_id'
     }
 })
+
+module.exports = Login;

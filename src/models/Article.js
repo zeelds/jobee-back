@@ -1,7 +1,7 @@
 const Sequelize = require('express')
 const database = require('../database/db')
 
-const Review = database.define('Review', {
+const Article = database.define('Article', {
     _id: {
         type: Sequelize.UUID,
         autoIncrement: true,
@@ -10,24 +10,27 @@ const Review = database.define('Review', {
         unique: true,
         defaultValue: Sequelize.UUIDV4
     },
-    stars: {
-        type: Sequelize.NUMBER,
-        defaultValue: 0.0,
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     content: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
     },
-    reviewed_id: {
-        type: Sequelize.UUID,
-        references: 'User',
-        referencesKey: '_id'
+    status: {
+        type: Sequelize.ENUM('publicado', 'rascunho'),
+        allowNull: false
     },
-    reviewer_id: {
+    tags: {
+        type: Sequelize.JSON,
+        allowNull: true
+    },
+    author_id: {
         type: Sequelize.UUID,
         references: 'User',
         referencesKey: '_id'
     }
 })
 
-module.exports = Review;
+module.exports = Article;

@@ -9,23 +9,9 @@ module.exports = {
 
         const Users = await User.findAll()
 
-        return {message: Users, status: 200}
+        return {data: Users, message: 'Busca finalizada com sucesso!', status: 200}
 
     },
-
-    //Verificações
-
-    async matchingPassword(password, repassword){
-
-        if(password == repassword){
-            return {message: 'as senhas combinam'}
-        }
-
-        return {message: 'as senhas não combinam'}
-
-    },
-
-    //Fim das verificações
 
     async createReview(stars, content, reviewed_id, reviewer_id){
 
@@ -36,7 +22,7 @@ module.exports = {
             reviewer_id: reviewer_id
         }) 
         
-        return {message: newReview, status: 200}
+        return {data: newReview, message: 'Avaliação criada com sucesso!', status: 200}
 
     },
 
@@ -52,7 +38,7 @@ module.exports = {
             {where: {id: id}}
         )
 
-        return {message: newReview, status: 200}
+        return {data: newReview, message: 'Avaliação atualizada com sucesso!', status: 200}
 
     },
 
@@ -60,7 +46,7 @@ module.exports = {
 
         const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}})
 
-        return {message: foundReviews, status:200}
+        return {data: foundReviews, message: 'Busca finalizada com sucesso!', status:200}
 
     },
 
@@ -68,7 +54,7 @@ module.exports = {
 
         const foundReviews = await Review.findOne({where: {id: id}})
 
-        return {message: foundReviews, status:200}
+        return {data: foundReviews, message: 'Busca finalizada com sucesso!', status:200}
 
     },
 
@@ -76,7 +62,7 @@ module.exports = {
 
         const removedReview = await Review.destroy({where: {id: id}})
 
-        return {message: removedReview, status:200}
+        return {data: removedReview, message: 'Avaliação excluída com sucesso!', status:200}
 
     },
 
@@ -89,7 +75,7 @@ module.exports = {
             user_id: user_id
         })
         
-        return {message: 'conta criada', status: 200, newLogin}
+        return {data: newLogin, message: 'conta criada', status: 200}
 
     },
 
@@ -106,7 +92,7 @@ module.exports = {
             {where: {email: email}}
         )
 
-        return {message: newLogin, status: 200}
+        return {data: newLogin, message: 'Login atualizado com sucesso!', status: 200}
 
     },
 
@@ -121,7 +107,7 @@ module.exports = {
             {where: {user_id: user_id}}
         )
 
-        return {message: newVerify, status: 200}
+        return {data: newVerify, message: 'Usuário verificado com sucesso!', status: 200}
 
     },
 
@@ -136,7 +122,7 @@ module.exports = {
             {where: {user_id: user_id}}
         )
 
-        return {message: newPassword, status: 200}
+        return {data: newPassword, message: 'Senha atualizada com sucesso!', status: 200}
 
     },
 
@@ -144,7 +130,7 @@ module.exports = {
 
         const foundLogin = await Login.findOne({where: {email: email}})
 
-        return {message: foundLogin, status:200}
+        return {data: foundLogin, message: 'Busca finalizada com sucesso!', status:200}
 
     },
 
@@ -152,7 +138,7 @@ module.exports = {
 
         const removedLogin = await Login.destroy({where: {email: email}})
 
-        return {message: removedLogin, status:200}
+        return {data: removedLogin, message: 'Login excluído com sucesso!', status:200}
 
     },
 
@@ -164,7 +150,7 @@ module.exports = {
             birthday: birthday
         }) 
         
-        return {message: newUser, status: 200}
+        return {data: newUser, message: 'Usuário criado com sucesso!', status: 200}
 
     },
 
@@ -188,7 +174,7 @@ module.exports = {
             {where: {id: id}}
         )
 
-        return {message: newUser, status: 200}
+        return {data: newUser, message: 'Usuário atualizado com sucesso!', status: 200}
 
     },
 
@@ -204,7 +190,7 @@ module.exports = {
 
         const removedUser = await User.destroy({where: {id: id}})
 
-        return {message: removedUser, status:200}
+        return {data: removedUser, message: 'Usuário excluído com sucesso!', status:200}
 
     },
 
@@ -217,7 +203,7 @@ module.exports = {
             user_id: user_id
         })
         
-        return {message: newConfig, status: 200}
+        return {data: newConfig, message: 'Acessibilidade criada com sucesso!', status: 200}
 
     },
 
@@ -234,7 +220,7 @@ module.exports = {
             {where: {user_id: user_id}}
         )
 
-        return {message: newAcessibility, status: 200}
+        return {data: newAcessibility, message: 'Acessibilidade atualizada com sucesso!', status: 200}
 
     },
 
@@ -242,7 +228,7 @@ module.exports = {
 
         const foundAccessibility = await Accessibility.findOne({where: {user_id: user_id}})
 
-        return {message: foundAccessibility, status:200}
+        return {data: foundAccessibility, message: 'Busca finalizada com sucesso!', status:200}
 
     },
 
@@ -250,7 +236,7 @@ module.exports = {
 
         const removedAccessibility = await Accessibility.destroy({where: {id: id}})
 
-        return {message: removedAccessibility, status:200}
+        return {data: removedAccessibility, message: 'Acessibilidade excluída com sucesso!', status:200}
 
     }
 

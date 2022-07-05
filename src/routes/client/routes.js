@@ -5,87 +5,91 @@ const router = express.Router();
 
 router.get('/')
 
-router.post('/register', async (req,res) => {
+router.post('/register', async (req, res) => {
 
-    const {email, password, repassword, name, birthday, gender} = req.body
+    const { email, password, repassword, name, birthday, gender } = req.body
 
     const errors = await creationValidate({
         email, password, repassword, name, birthday, gender
     })
 
-    if(errors != false){
-        return res.json({type: 'error', message: errors})
+    if (errors != false) {
+        return res.json({ type: 'error', message: errors })
     }
 
-    const newUser = UserController.createUser(name,gender,birthday)
+    const newUser = UserController.createUser(name, gender, birthday)
 
-    newUser.then((response)=>{
+    newUser.then((response) => {
 
-        const user_id = response.message.id
+        const user_id = response.data.id
 
-        const newLogin = UserController.createLogin(email,password,user_id)
-        const newAcessibility = UserController.createAccessibility(false,'Ele','Nenhum',user_id)
+        const newLogin = UserController.createLogin(email, password, user_id)
+        const newAcessibility = UserController.createAccessibility(false, 'Ele', 'Nenhum', user_id)
 
-        return res.json({message: user_id+' foi registrado com sucesso!'})
+        return res.json({ message: user_id + ' foi registrado com sucesso!' })
 
-    }).catch((errors)=>{
+    }).catch((errors) => {
 
-        return res.json({type: 'error', errors: errors})
+        return res.json({ type: 'error', errors: errors })
 
     })
 
 
 })
 
-router.post('/auth', async (req,res)=>{
-    
-    const {email, password} = req.body
+router.post('/auth', async (req, res) => {
+
+    const { email, password } = req.body
 
     const combination = await UserController.getLogin(email)
 
-    if(
-        combination.message != null
+    if (
+        combination.data != null
         &&
-        email == combination.message.email
+        email == combination.data.email
         &&
-        password == combination.message.password
-    ){
-        return res.json({email: email, password: password, token: 'token-here'})
+        password == combination.data.password
+    ) {
+        return res.json({ email: email, password: password, token: 'token-here' })
     }
 
-    return res.json({message: 'As credenciais estão incorretas!'})
+    return res.json({ type: 'error', message: 'As credenciais estão incorretas!' })
 
 })
 
-router.get('/verify/:id', async (req,res)=>{
+router.get('/verify/:id', async (req, res) => {
+
+     //Um botão do front pro email que manda de volta pro front, mas passando um 
+     //Parâmetro na url que assim que a página abre, envia uma req pra essa rota
+     //E confirma a conta :-)
 
     const user_id = req.params.id
 
-    const updatedVerify = await UserController.updateVerifiedStatus(true, user_id)
+    const updatedVerify = await UserController.updateVerifiedStatus({ isverified: true, user_id: user_id })
 
-    if(!updatedVerify.message){
-        return res.json({message: user_id+' teve sua conta verificada!'})
+    if (updatedVerify.data == 0) {
+        return res.json({ type: 'error', message: 'Essa conta não pôde ser verificada no momento.' })
     }
 
-    return res.json({message: 'Essa conta não pôde ser verificada no momento.'})
+    return res.json({ type: 'success', message: 'Você teve sua conta verificada!' })
 
 })
 
 
-router.post('/redefine-password', async (req,res)=>{
+router.post('/redefine-password', async (req, res) => {
 
     //Vai enviar algo criptografado aqui e ele vai tentar ser transformado no email
     //da pessoa
     const email = req.body.email
     const newPassword = req.body.password
 
-    const updatedLogin = await UserController.updateLogin({password: newPassword, email: email})
+    const updatedLogin = await UserController.updateLogin({ password: newPassword, email: email })
 
-    if(updatedLogin.message == 0){
-        return res.json({message: 'Ocorreu algum erro na redefinição de senha.'})
+    if (updatedLogin.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de senha.' })
     }
 
-    return res.json({message: 'A senha foi redefinida.', body: updatedLogin})
+    return res.json({ type: 'success', message: 'A senha foi redefinida.', body: updatedLogin })
 
 })
 

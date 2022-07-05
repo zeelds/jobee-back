@@ -23,7 +23,7 @@ async function creationValidate(values) {
     else {
         const foundLogin = await UserController.getLogin(email)
 
-        if (foundLogin.message) {
+        if (foundLogin.data) {
             errors.push({
                 where: 'email',
                 content: 'O e-mail digitado já está vinculado a uma conta.'

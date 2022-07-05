@@ -14,7 +14,7 @@ module.exports = {
             author_id: author_id
         })
 
-        return {message: createdArticle, status: 200}
+        return {data: createdArticle, message: 'Artigo criado com sucesso!', status: 200}
 
     },
     
@@ -22,7 +22,7 @@ module.exports = {
 
         const foundArticle = await Article.findOne({where: {id: id}})
 
-        return {message: foundArticle, status: 200}
+        return {data: foundArticle, message: 'Busca finalizada com sucesso!', status: 200}
 
     },
 
@@ -30,7 +30,7 @@ module.exports = {
 
         const foundArticle = await Article.findAll({where: {author_id: author_id}})
 
-        return {message: foundArticle, status: 200}
+        return {data: foundArticle, message: 'Busca finalizada com sucesso!', status: 200}
 
     },
 
@@ -45,7 +45,7 @@ module.exports = {
             where: {id: id}
         })
 
-        return {message: newArticle, status: 200}
+        return {data: newArticle, message: 'Artigo atualizado com sucesso!', status: 200}
 
     },
 
@@ -53,7 +53,7 @@ module.exports = {
 
         const removedArticle = await Article.destroy({where: {id: id}})
 
-        return {message: removedArticle, status: 200}
+        return {data: removedArticle, message: 'Artigo excluído com sucesso!', status: 200}
 
     },
 
@@ -65,7 +65,7 @@ module.exports = {
             article_id: article_id
         })
 
-        return {message: createdComment, status: 200}
+        return {data: createdComment, message: 'Comentário criado com sucesso!', status: 200}
 
     },
     
@@ -73,7 +73,7 @@ module.exports = {
 
         const foundComment = await Comment.findOne({where:{id: id}})
 
-        return {message: foundComment, status: 200}
+        return {data: foundComment, message: 'Busca finalizada com sucesso', status: 200}
 
     },
 
@@ -81,7 +81,7 @@ module.exports = {
 
         const foundComments = await Comment.findAll({where:{article_id: article_id}})
 
-        return {message: foundComments, status: 200}
+        return {data: foundComments, message: 'Busca finalizada com sucesso!', status: 200}
 
     },
 
@@ -89,7 +89,7 @@ module.exports = {
 
         const foundComments = await Comment.findAll({where:{author_id: author_id}})
 
-        return {message: foundComments, status: 200}
+        return {data: foundComments, message: 'Busca finalizada com sucesso!', status: 200}
 
     },
 
@@ -99,7 +99,7 @@ module.exports = {
             content: content
         },{where:{id: id}})
 
-        return {message: newComment, status: 200}
+        return {data: newComment, message: 'Comentário atualizado com sucesso!', status: 200}
 
     },
 
@@ -107,7 +107,7 @@ module.exports = {
 
         const removedComment = await Comment.destroy({where: {id: id}})
 
-        return {message: removedComment, status: 200}
+        return {data: removedComment, message: 'Comentário deletado com sucesso!', status: 200}
 
     },
 

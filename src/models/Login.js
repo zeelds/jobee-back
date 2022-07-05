@@ -23,7 +23,7 @@ const Login = database.define("Login", {
     user_id: {
         type: DataTypes.UUID,
         references: 'User',
-        referencesKey: '_id'
+        referencesKey: 'id'
     }
 })
 

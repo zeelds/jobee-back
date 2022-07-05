@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const User = database.define('User', {
-    _id: {
+    id: {
         type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
@@ -24,7 +24,7 @@ const User = database.define('User', {
         type: DataTypes.STRING,
         defaultValue: 'default.png'
     },
-    isVerified: {
+    isverified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },

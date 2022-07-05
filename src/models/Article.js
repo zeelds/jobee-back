@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Article = database.define('Article', {
-    _id: {
+    id: {
         type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
@@ -29,7 +29,7 @@ const Article = database.define('Article', {
     author_id: {
         type: DataTypes.UUID,
         references: 'User',
-        referencesKey: '_id'
+        referencesKey: 'id'
     }
 })
 

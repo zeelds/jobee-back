@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Accessibility = database.define('Accessibility', {
-    _id: {
+    id: {
         type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
@@ -26,7 +26,7 @@ const Accessibility = database.define('Accessibility', {
     user_id: {
         type: DataTypes.UUID,
         references: 'User',
-        referencesKey: '_id'
+        referencesKey: 'id'
     }
 });
 

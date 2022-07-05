@@ -1,10 +1,12 @@
 const express = require('express');
 const UserController = require('../../controllers/UserController');
-const { creationValidate } = require('./functions');
+const { verifyJWT, creationValidate } = require('./functions');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 
-router.get('/')
+router.get('/', verifyJWT, (req,res) => {
+    return res.json({type: 'success', message: 'Você está autenticado!'})
+})
 
 router.post('/register', async (req, res) => {
 
@@ -51,21 +53,24 @@ router.post('/auth', async (req, res) => {
         &&
         password == combination.data.password
     ) {
-        jwt.sign({
-            user_id: combination.data.user_id
-        })
-        return res.json({ email: email, password: password, token: 'token-here' })
+        const token = jwt.sign(
+            { user_id: combination.data.user_id },
+            process.env.SECRET_JWT,
+            {expiresIn: 3000}
+        );
+
+        return res.json({ auth: true, token: token })
     }
 
-    return res.json({ type: 'error', message: 'As credenciais estão incorretas!' })
+    return res.json({ auth: false, type: 'error', message: 'As credenciais estão incorretas!' })
 
 })
 
 router.get('/verify/:id', async (req, res) => {
 
-     //Um botão do front pro email que manda de volta pro front, mas passando um 
-     //Parâmetro na url que assim que a página abre, envia uma req pra essa rota
-     //E confirma a conta :-)
+    //Um botão do front pro email que manda de volta pro front, mas passando um 
+    //Parâmetro na url que assim que a página abre, envia uma req pra essa rota
+    //E confirma a conta :-)
 
     const user_id = req.params.id
 

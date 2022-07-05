@@ -1,5 +1,6 @@
 
 const validator = require('email-validator')
+const jwt = require('jsonwebtoken')
 const UserController = require('../../controllers/UserController')
 
 async function creationValidate(values) {
@@ -92,4 +93,14 @@ async function creationValidate(values) {
 
 }
 
-module.exports = { creationValidate }
+function verifyJWT(req,res,next){
+    const token = req.headers['x-access-token']
+    jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+        if(err) return res.status(401).json({auth: false, message: 'Você precisa estar autenticado para acessar essa rota.'});
+
+        req.user_id = decoded.user_id
+        next()
+    })
+}
+
+module.exports = { verifyJWT, creationValidate }

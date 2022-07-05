@@ -4,9 +4,8 @@ const UserController = require('../../controllers/UserController.js')
 
 router.get('/', async (req, res) => {
 
-    const Users = await UserController.teste()
-
-    return res.json(Users)
+    //const Users = await UserController.teste()
+    //return res.json(Users)
 
 })
 

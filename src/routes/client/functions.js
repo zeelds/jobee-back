@@ -1,7 +1,8 @@
 
 const validator = require('email-validator')
+const UserController = require('../../controllers/UserController')
 
-function creationValidate(values){
+async function creationValidate(values){
 
     const {email, password, repassword, name, birthday, gender} = values
     
@@ -76,6 +77,15 @@ function creationValidate(values){
             content: 'As senhas não coincidem.'
         })
     };
+
+    const foundLogin = await UserController.teste()
+
+    if(foundLogin){
+        errors.push({
+            where: 'email',
+            content: 'O e-mail digitado já está vinculado a uma conta.'
+        })
+    }
 
     return errors
 

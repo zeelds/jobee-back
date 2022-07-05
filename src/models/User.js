@@ -32,6 +32,10 @@ const User = database.define('User', {
         type: DataTypes.ENUM("Masculino", "Feminino", "Outros", "Prefiro não dizer"),
         defaultValue: "Prefiro não dizer"
     },
+    birthday: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
     contact: {
         type: DataTypes.JSON,
         allowNull: true

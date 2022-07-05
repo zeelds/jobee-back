@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const Login = require('../models/Login')
 const Accessibility = require('../models/Accessibility')
+const Review = require('../models/Review')
 
 module.exports = {
 
@@ -25,6 +26,59 @@ module.exports = {
     },
 
     //Fim das verificações
+
+    async createReview(stars, content, reviewed_id, reviewer_id){
+
+        const newReview = await Review.create({
+            stars: stars,
+            content: content,
+            reviewed_id: reviewed_id,
+            reviewer_id: reviewer_id
+        }) 
+        
+        return {message: newReview, status: 200}
+
+    },
+
+    async updateReview(values){
+
+        const {id, stars, content} = values
+
+        const newReview = await Review.update(
+            {
+                stars: stars,
+                content: content
+            },
+            {where: {id: id}}
+        )
+
+        return {message: newReview, status: 200}
+
+    },
+
+    async getAllReviews(reviewed_id){
+
+        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}})
+
+        return {message: foundReviews, status:200}
+
+    },
+
+    async getReview(id){
+
+        const foundReviews = await Review.findOne({where: {id: id}})
+
+        return {message: foundReviews, status:200}
+
+    },
+
+    async deleteReview(id){
+
+        const removedReview = await Review.destroy({where: {id: id}})
+
+        return {message: removedReview, status:200}
+
+    },
 
     async createLogin(email,password,user_id){
 

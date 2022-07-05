@@ -71,4 +71,22 @@ router.get('/verify/:id', async (req,res)=>{
 
 })
 
+
+router.post('/redefine-password', async (req,res)=>{
+
+    //Vai enviar algo criptografado aqui e ele vai tentar ser transformado no email
+    //da pessoa
+    const email = req.body.email
+    const newPassword = req.body.password
+
+    const updatedLogin = await UserController.updateLogin({password: newPassword, email: email})
+
+    if(updatedLogin.message == 0){
+        return res.json({message: 'Ocorreu algum erro na redefinição de senha.'})
+    }
+
+    return res.json({message: 'A senha foi redefinida.', body: updatedLogin})
+
+})
+
 module.exports = router;

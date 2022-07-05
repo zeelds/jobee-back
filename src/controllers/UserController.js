@@ -95,14 +95,15 @@ module.exports = {
 
     async updateLogin(values){
 
-        const {password, isverified, user_id} = values
+        const {password, email} = values
+
+        console.log(email)
 
         const newLogin = await Login.update(
             {
-                password: password,
-                isverified: isverified,
+                password: password
             },
-            {where: {user_id: user_id}}
+            {where: {email: email}}
         )
 
         return {message: newLogin, status: 200}

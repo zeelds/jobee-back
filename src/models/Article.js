@@ -1,33 +1,33 @@
-const Sequelize = require('express')
+const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Article = database.define('Article', {
     _id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: DataTypes.UUIDV4
     },
     title: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     content: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     status: {
-        type: Sequelize.ENUM('publicado', 'rascunho'),
+        type: DataTypes.ENUM('publicado', 'rascunho'),
         allowNull: false
     },
     tags: {
-        type: Sequelize.JSON,
+        type: DataTypes.JSON,
         allowNull: true
     },
     author_id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         references: 'User',
         referencesKey: '_id'
     }

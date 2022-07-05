@@ -1,47 +1,47 @@
-const Sequelize = require('sequelize')
+const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const User = database.define('User', {
     _id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: DataTypes.UUIDV4
     },
     name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     title: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
     },
     biography: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
     },
     avatar: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         defaultValue: 'default.png'
     },
     isVerified: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false
     },
     gender: {
-        type: Sequelize.ENUM("Masculino", "Feminino", "Outros", "Prefiro não dizer"),
+        type: DataTypes.ENUM("Masculino", "Feminino", "Outros", "Prefiro não dizer"),
         defaultValue: "Prefiro não dizer"
     },
     contact: {
-        type: Sequelize.JSON,
+        type: DataTypes.JSON,
         allowNull: true
     },
     tags: {
-        type: Sequelize.JSON,
+        type: DataTypes.JSON,
         allowNull: true,
     },
     ban_info: {
-        type: Sequelize.JSON,
+        type: DataTypes.JSON,
         allowNull: true
     }
 });

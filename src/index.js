@@ -1,8 +1,10 @@
-const express = require('express')
-const app = express()
-require('dotenv/config')
-const mainRoutes = require('./routes/main/main')
-const bodyParser = require('body-parser')
+const express = require('express');
+const app = express();
+require('dotenv/config');
+const mainRoutes = require('./routes/main/main');
+const bodyParser = require('body-parser');
+require('./database/db')
+require('./database/start')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));

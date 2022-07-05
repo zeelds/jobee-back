@@ -1,27 +1,27 @@
-const Sequelize = require('sequelize')
+const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Login = database.define("Login", {
     email: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
         unique: true,
     },
     password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     isVerified: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false
     },
     isAdmin: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false
     },
     user_id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         references: 'User',
         referencesKey: '_id'
     }

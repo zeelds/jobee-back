@@ -1,26 +1,26 @@
-const Sequelize = require('express')
+const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Comment = database.define('Comment', {
     _id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: DataTypes.UUIDV4
     },
     content: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     author_id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         references: 'User',
         referencesKey: '_id'
     },
     article_id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         references: 'Article',
         referencesKey: '_id'
     }

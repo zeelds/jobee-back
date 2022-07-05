@@ -1,30 +1,30 @@
-const Sequelize = require('sequelize')
+const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
 const Accessibility = database.define('Accessibility', {
     _id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: DataTypes.UUIDV4
     },
     unlettered: {
-        type: Sequelize.BOOLEAN
+        type: DataTypes.BOOLEAN
     },
     pronouns: {
-        type: Sequelize.ENUM('Ele', 'Ela', 'Elu')
+        type: DataTypes.ENUM('Ele', 'Ela', 'Elu')
     },
     color_blindness: {
-        type: Sequelize.ENUM('Deuteranomalia', 'Protanomalia', 
+        type: DataTypes.ENUM('Deuteranomalia', 'Protanomalia', 
         'Protanopia', 'Deuteranopia',
         'Tritanomalia', 'Tritanopia',
         'Total'
         )
     },
     user_id: {
-        type: Sequelize.UUID,
+        type: DataTypes.UUID,
         references: 'User',
         referencesKey: '_id'
     }

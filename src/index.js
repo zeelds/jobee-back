@@ -3,6 +3,7 @@ const app = express();
 require('dotenv/config');
 const mainRoutes = require('./routes/main/routes');
 const adminRoutes = require('./routes/admin/routes');
+const clientRoutes = require('./routes/client/routes');
 const bodyParser = require('body-parser');
 require('./database/db')
 require('./database/start')
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/', mainRoutes)
 app.use('/admin', adminRoutes)
+app.use('/client', clientRoutes)
 app.use(cors())
 
 app.listen(process.env.SERVER_PORT, () => {

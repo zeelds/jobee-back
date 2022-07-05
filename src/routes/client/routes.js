@@ -6,10 +6,19 @@ router.get('/')
 
 router.post('/register', async (req,res) => {
 
-    //const errors = creationValidate
-    //if creationValidate return errors
+    const {email, password, repassword, name, birthday, gender} = req.body
 
-    return res.json({message: 'registrando...', body: req.body})
+    const errors = await creationValidate({
+        email, password, repassword, name, birthday, gender
+    })
+
+    if(errors != false){
+        return res.json({message: errors, body: req.body})
+    }
+
+    return res.json({
+        message:'todos os dados estão corretos, e a conta foi criada!'
+    })
 
 })
 

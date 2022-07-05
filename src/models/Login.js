@@ -12,11 +12,11 @@ const Login = database.define("Login", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    isVerified: {
+    isverified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    isAdmin: {
+    isadmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },

@@ -4,7 +4,6 @@ const database = require('../database/db')
 const Comment = database.define('Comment', {
     id: {
         type: DataTypes.UUID,
-        autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,

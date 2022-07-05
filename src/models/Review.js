@@ -4,14 +4,13 @@ const database = require('../database/db')
 const Review = database.define('Review', {
     id: {
         type: DataTypes.UUID,
-        autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         unique: true,
         defaultValue: DataTypes.UUIDV4
     },
     stars: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.DOUBLE,
         defaultValue: 0.0,
     },
     content: {

@@ -85,8 +85,10 @@ async function creationValidate(values){
             where: 'email',
             content: 'O e-mail digitado já está vinculado a uma conta.'
         })
-    }
+    };
 
     return errors
 
 }
+
+module.exports = {creationValidate}

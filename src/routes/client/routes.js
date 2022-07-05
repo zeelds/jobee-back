@@ -14,7 +14,7 @@ router.post('/register', async (req,res) => {
     })
 
     if(errors != false){
-        return res.json({message: errors, body: req.body})
+        return res.json({type: 'error', message: errors})
     }
 
     const newUser = UserController.createUser(name,gender,birthday)
@@ -30,10 +30,30 @@ router.post('/register', async (req,res) => {
 
     }).catch((errors)=>{
 
-        return res.json({errors: errors})
+        return res.json({type: 'error', errors: errors})
 
     })
 
+
+})
+
+router.post('/auth', async (req,res)=>{
+    
+    const {email, password} = req.body
+
+    const combination = await UserController.getLogin(email)
+
+    if(
+        combination.message != null
+        &&
+        email == combination.message.email
+        &&
+        password == combination.message.password
+    ){
+        return res.json({email: email, password: password, token: 'token-here'})
+    }
+
+    return res.json({message: 'As credenciais estão incorretas!'})
 
 })
 

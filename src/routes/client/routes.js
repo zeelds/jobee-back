@@ -2,6 +2,7 @@ const express = require('express');
 const UserController = require('../../controllers/UserController');
 const { creationValidate } = require('./functions');
 const router = express.Router();
+const jwt = require('jsonwebtoken')
 
 router.get('/')
 
@@ -50,6 +51,9 @@ router.post('/auth', async (req, res) => {
         &&
         password == combination.data.password
     ) {
+        jwt.sign({
+            user_id: combination.data.user_id
+        })
         return res.json({ email: email, password: password, token: 'token-here' })
     }
 

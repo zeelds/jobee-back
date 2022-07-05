@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 require('./database/db')
 require('./database/start')
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));

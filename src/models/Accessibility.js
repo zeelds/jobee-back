@@ -16,7 +16,7 @@ const Accessibility = database.define('Accessibility', {
         type: DataTypes.ENUM('Ele', 'Ela', 'Elu')
     },
     color_blindness: {
-        type: DataTypes.ENUM('Deuteranomalia', 'Protanomalia', 
+        type: DataTypes.ENUM('Nenhum','Deuteranomalia', 'Protanomalia', 
         'Protanopia', 'Deuteranopia',
         'Tritanomalia', 'Tritanopia',
         'Total'

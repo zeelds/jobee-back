@@ -87,7 +87,7 @@ module.exports = {
             password: password,
             isverified: false,
             user_id: user_id
-        }) 
+        })
         
         return {message: 'conta criada', status: 200, newLogin}
 
@@ -106,6 +106,36 @@ module.exports = {
         )
 
         return {message: newLogin, status: 200}
+
+    },
+
+    async updateVerifiedStatus(values){
+
+        const {isverified, user_id} = values
+
+        const newVerify = await Login.update(
+            {
+                isverified: isverified,
+            },
+            {where: {user_id: user_id}}
+        )
+
+        return {message: newVerify, status: 200}
+
+    },
+
+    async updatePassword(values){
+
+        const {password, user_id} = values
+
+        const newPassword = await Login.update(
+            {
+                password: password,
+            },
+            {where: {user_id: user_id}}
+        )
+
+        return {message: newPassword, status: 200}
 
     },
 
@@ -177,12 +207,13 @@ module.exports = {
 
     },
 
-    async createAccessibility(unlettered,pronouns,color_blindness){
+    async createAccessibility(unlettered,pronouns,color_blindness, user_id){
 
         const newConfig = await Accessibility.create({
             unlettered: unlettered,
             pronouns: pronouns,
-            color_blindness: color_blindness
+            color_blindness: color_blindness,
+            user_id: user_id
         })
         
         return {message: newConfig, status: 200}

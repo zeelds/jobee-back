@@ -12,7 +12,7 @@ router.post('/checkout', verifyJWT, async (req,res)=>{
     const user_id = req.user_id
 
     //checar se o pagamento é real mesmo
-    
+
     if(!payment_data){
         return res.json({type: 'error', message: 'Ocorreu um erro ao cadastrar o Usuário Pro.'})
     }
@@ -23,4 +23,4 @@ router.post('/checkout', verifyJWT, async (req,res)=>{
 
 })
 
-module.exports = {router}
+module.exports = router

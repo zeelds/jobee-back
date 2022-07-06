@@ -129,7 +129,24 @@ router.post('/redefine-accessibility', verifyJWT, async (req, res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de acessibilidade.' })
     }
 
-    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', body: updatedLogin })
+    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', body: newAcessibility })
+
+})
+
+router.post('/redefine-user', verifyJWT, async (req, res) => {
+
+    const { name, title, biography, avatar, gender, birthday, contact, tags } = req.body
+    const id = req.body.user_id
+
+    const newUser = await UserController.updateUser({ 
+        id, name, title, biography, avatar, isverified: false, gender, birthday, contact, tags
+     })
+
+    if (newUser.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de usuário.' })
+    }
+
+    return res.json({ type: 'success', message: 'O usuário foi redefinida.', body: newUser })
 
 })
 

@@ -157,7 +157,7 @@ module.exports = {
 
     async updateUser(values){
 
-        const {id, name, title, biography, avatar, isverified, gender, birthday, contact, tags, ban_info} = values
+        const {id, name, title, biography, avatar, isverified, gender, birthday, contact, tags} = values
 
         const newUser = await User.update(
             {
@@ -165,12 +165,11 @@ module.exports = {
                 title: title,
                 biography: biography,
                 avatar: avatar,
-                isverified: false,
+                isverified: isverified,
                 gender: gender,
                 birthday: birthday,
                 contact: contact,
-                tags: tags,
-                ban_info: ban_info
+                tags: tags
             },
             {where: {id: id}}
         )

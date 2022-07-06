@@ -1,6 +1,7 @@
 
 const validator = require('email-validator')
 const jwt = require('jsonwebtoken')
+const ProController = require('../../controllers/ProController')
 const UserController = require('../../controllers/UserController')
 
 async function creationValidate(values) {
@@ -93,10 +94,10 @@ async function creationValidate(values) {
 
 }
 
-function verifyJWT(req,res,next){
+function verifyJWT(req, res, next) {
     const token = req.headers['x-access-token']
     jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
-        if(err) return res.status(401).json({auth: false, message: 'Você precisa estar autenticado para acessar essa rota.'});
+        if (err) return res.status(401).json({ auth: false, message: 'Você precisa estar autenticado para acessar essa rota.' , err: err});
 
         req.user_id = decoded.user_id
         next()
@@ -104,29 +105,45 @@ function verifyJWT(req,res,next){
 }
 
 
-function verifyJWT_admin(req,res,next){
+function verifyJWT_admin(req, res, next) {
     const token = req.headers['x-access-token']
     jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
-        if(err) return res.status(401).json({auth: false, message: 'Você precisa estar autenticado como admin para acessar essa rota.'});
+        if (err) return res.status(401).json({ auth: false, message: 'Você precisa estar autenticado como admin para acessar essa rota.' });
 
         req.isAdmin = decoded.isAdmin
         next()
     })
 }
 
-function sendVerificationMail(transporter, to,token){
+function sendVerificationMail(transporter, to, token) {
 
     const mailData = {
         from: process.env.COMPANY_EMAIL,
         to: to,
         subject: 'Verifique a sua conta da plataforma Jobee',
         text: 'link abaixo!',
-        html: "<b>Olá, esperamos que nossa plataforma supere as suas expectativas! </b><br> Muitíssimo obrigado por se cadastrar e dar seu voto de confiança neste projeto. <br /> Agora você só precisa <b><a href='http://localhost:3001/client/verify/"+token+"'>clicar aqui para verificar sua conta</a></b>!<br/>"
+        html: "<b>Olá, esperamos que nossa plataforma supere as suas expectativas! </b><br> Muitíssimo obrigado por se cadastrar e dar seu voto de confiança neste projeto. <br /> Agora você só precisa <b><a href='http://localhost:3001/client/verify/" + token + "'>clicar aqui para verificar sua conta</a></b>!<br/>"
     };
 
     transporter.sendMail(mailData)
 
+}
+
+async function checkPro(mustBe, user_id) {
+
+    const foundPro = await ProController.getPro(user_id)
+
+    if (
+        foundPro.data != null
+        &&
+        mustBe.includes(foundPro.data.plan)
+    ) {
+        return true
+    }
+
+    return false
 
 }
 
-module.exports = { verifyJWT, creationValidate, sendVerificationMail, verifyJWT_admin }
+
+module.exports = { verifyJWT, creationValidate, sendVerificationMail, verifyJWT_admin, checkPro }

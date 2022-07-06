@@ -177,6 +177,14 @@ module.exports = {
 
     },
 
+    async updateAvatar(avatar, id){
+
+        const newAvatar = await User.update({avatar: avatar},{where: {id: id}})
+
+        return {data: newAvatar, message: 'Avatar atualizado com sucesso!', status: 200}
+
+    },
+
     async getUser(id){
 
         const foundUser = await User.findOne({where: {id: id}})

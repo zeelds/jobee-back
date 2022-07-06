@@ -1,10 +1,16 @@
 const express = require('express');
 const ArticleController = require('../../controllers/ArticleController');
-const { verifyJWT } = require('../client/functions');
+const { verifyJWT, checkPro } = require('../client/functions');
 const router = express.Router();
 
-router.post('/', (req,res) => {
-    return res.json('teste')
+router.post('/', verifyJWT, async (req,res) => {
+    
+    const user_id = req.user_id
+
+    const isPro = await checkPro(['Padrão', 'Profissional'], user_id)
+
+    return res.json(isPro)
+
 })
 
 router.post('/create-article', verifyJWT, async (req,res) => {
@@ -12,11 +18,12 @@ router.post('/create-article', verifyJWT, async (req,res) => {
     //if user é premium, pode colocar textos maiores, se n vai dar erro se tiver mt longo
     
     const {title,content,status,tags} = req.body
-    const user_id = req.body.user_id
+    const user_id = req.user_id
 
     const newArticle = await ArticleController.createArticle(title,content,status,tags,user_id)
 
     return res.json({data: newArticle, message: 'Artigo criado com sucesso!', status: 200})
+
 })
 
 router.post('/update-article', verifyJWT, async (req,res) => {
@@ -24,17 +31,23 @@ router.post('/update-article', verifyJWT, async (req,res) => {
     //if user é premium, pode editar o texto do artigo, se n, n vai rolar
     
     const {id,title,content,status,tags} = req.body
-    const user_id = req.body.user_id
+    const user_id = req.user_id
+
+    const isAllowed = checkPro(mustBe=['Profissional','Investido'], user_id=user_id)
+
+    if(!isAllowed){
+        return res.json({type: 'error', message: 'Você deve ser um Usuário Pro de nível Investido ou Profissional!', status: 200})
+    }
 
     const updatedArticle = await ArticleController.updateArticle(id,title,content,status,tags,user_id)
 
-    return res.json({data: updatedArticle, message: 'Artigo atualizado com sucesso!', status: 200})
+    return res.json({type: 'success', data: updatedArticle, message: 'Artigo atualizado com sucesso!', status: 200})
 })
 
 router.post('/delete-article', verifyJWT, async (req,res) => {
     
     const {id} = req.body
-    const user_id = req.body.user_id
+    const user_id = req.user_id
 
     const removedArticle = await ArticleController.deleteArticle(id, user_id)
 
@@ -66,9 +79,9 @@ router.get('/article-comments-list/:article_id', async (req,res) => {
 
     const article_id = req.params.article_id
 
-    const newArticle = await ArticleController.getAllArticleComments(article_id)
+    const foundArticles = await ArticleController.getAllArticleComments(article_id)
 
-    return res.json({data: newArticle, message: 'Comentários encontrados com sucesso!', status: 200})
+    return res.json({data: foundArticles, message: 'Comentários encontrados com sucesso!', status: 200})
 
 })
 
@@ -76,16 +89,16 @@ router.get('/user-comments-list/:user_id', async (req,res) => {
 
     const user_id = req.params.user_id
 
-    const newArticle = await ArticleController.getAllUserComments(user_id)
+    const foundComments = await ArticleController.getAllUserComments(user_id)
 
-    return res.json({data: newArticle, message: 'Comentários encontrados com sucesso!', status: 200})
+    return res.json({data: foundComments, message: 'Comentários encontrados com sucesso!', status: 200})
 
 })
 
 router.post('/create-comment', verifyJWT, async (req,res) => {
     
     const {content,article_id} = req.body
-    const author_id = req.body.user_id
+    const author_id = req.user_id
 
     const newComment = await ArticleController.createComment(content,author_id,article_id)
 
@@ -96,7 +109,13 @@ router.post('/create-comment', verifyJWT, async (req,res) => {
 router.post('/update-comment', verifyJWT, async (req,res) => {
     
     const {id,content} = req.body
-    const user_id = req.body.user_id
+    const user_id = req.user_id
+
+    const isAllowed = checkPro(mustBe=['Padrão', 'Profissional','Investido'], user_id=user_id)
+
+    if(!isAllowed){
+        return res.json({type: 'error', message: 'Você deve ser um Usuário Pro!', status: 200})
+    }
 
     const updatedComment = await ArticleController.updateComment(id, content, user_id)
 
@@ -106,7 +125,7 @@ router.post('/update-comment', verifyJWT, async (req,res) => {
 router.post('/delete-comment', verifyJWT, async (req,res) => {
     
     const {id} = req.body
-    const author_id = req.body.user_id
+    const author_id = req.user_id
 
     const removedComment = await ArticleController.deleteComment(id, author_id)
 

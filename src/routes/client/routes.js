@@ -1,9 +1,10 @@
 const express = require('express');
 const UserController = require('../../controllers/UserController');
-const { verifyJWT, creationValidate, sendVerificationMail } = require('./functions');
+const { verifyJWT, creationValidate, sendVerificationMail, checkPro } = require('./functions');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
+const upload = require('../../config/multer');
 
 const transporter = nodemailer.createTransport({
     port: 465,
@@ -42,7 +43,7 @@ router.post('/register', async (req, res) => {
         const newLogin = UserController.createLogin(email, password, user_id)
         const newAcessibility = UserController.createAccessibility(unlettered, pronouns, color_blindness, user_id)
 
-        const verifyToken = jwt.sign({ verify_user_id: user_id }, process.env.SECRET_JWT, { expiresIn: 2700 })
+        const verifyToken = jwt.sign({ verify_user_id: user_id }, process.env.SECRET_JWT, { expiresIn: 27000 })
 
         sendVerificationMail(transporter, email, verifyToken)
 
@@ -73,7 +74,7 @@ router.post('/auth', async (req, res) => {
 
         if (!combination.data.isverified) {
 
-            const verifyToken = jwt.sign({ verify_user_id: combination.data.user_id }, process.env.SECRET_JWT, { expiresIn: 2700 })
+            const verifyToken = jwt.sign({ verify_user_id: combination.data.user_id }, process.env.SECRET_JWT, { expiresIn: 27000 })
 
             sendVerificationMail(transporter, email, verifyToken)
 
@@ -83,7 +84,7 @@ router.post('/auth', async (req, res) => {
         const token = jwt.sign(
             { user_id: combination.data.user_id },
             process.env.SECRET_JWT,
-            { expiresIn: 3000 }
+            { expiresIn: 84600 }
         );
 
         return res.json({ auth: true, token: token })
@@ -119,9 +120,51 @@ router.get('/verify/:token', async (req, res) => {
 
 })
 
+router.post('/upload-avatar', upload.single('avatar'), verifyJWT, async (req, res) => {
+
+    const user_id = req.user_id
+
+    const isPro = await checkPro(mustBe = ['Profissional', 'Investido'], user_id = user_id)
+
+    if (
+        isPro == false
+        &&
+        req.file.mimetype == 'gif'
+    ) {
+        return res.json(
+            {
+                type: 'error',
+                message: 'A imagem não foi adicionada porque o usuário não é Usuário Pro!',
+                filename: req.file.filename
+            }
+        )
+    }
+
+    return res.json(
+        {
+            type: 'success',
+            message: 'Imagem adicionada com sucesso!',
+            filename: req.file.filename
+        }
+    )
+
+})
+
+router.post('/change-avatar', verifyJWT, async (req, res) => {
+
+    const avatar = req.body.avatar
+    const user_id = req.user_id
+
+    const newAvatar = await UserController.updateAvatar(avatar, user_id)
+
+    return res.json({ type: 'success', data: newAvatar, message: 'Você atualizou seu avatar!' })
+
+})
+
 router.post('/redefine-accessibility', verifyJWT, async (req, res) => {
 
     const { unlettered, pronouns, color_blindness } = req.body
+    const user_id = req.user_id
 
     const newAcessibility = await UserController.updateAccessibility({ unlettered, pronouns, color_blindness, user_id })
 
@@ -136,11 +179,11 @@ router.post('/redefine-accessibility', verifyJWT, async (req, res) => {
 router.post('/redefine-user', verifyJWT, async (req, res) => {
 
     const { name, title, biography, gender, birthday, contact, tags } = req.body
-    const id = req.body.user_id
+    const id = req.user_id
 
-    const newUser = await UserController.updateUser({ 
+    const newUser = await UserController.updateUser({
         id, name, title, biography, isverified: false, gender, birthday, contact, tags
-     })
+    })
 
     if (newUser.data == 0) {
         return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de usuário.' })
@@ -200,7 +243,7 @@ router.post('/write-review', verifyJWT, async (req, res) => {
 
     //fazer um check pra ver se o reviewed n é igual ao reviewers
 
-    const reviewer_id = req.body.user_id
+    const reviewer_id = req.user_id
     const reviewed_id = req.body.reviewed_id
     const stars = req.body.stars
     const content = req.body.content
@@ -225,7 +268,7 @@ router.post('/edit-review', verifyJWT, async (req, res) => {
     const id = req.body.id
     const stars = req.body.stars
     const content = req.body.content
-    const user_id = req.body.user_id
+    const user_id = req.user_id
 
     const newReview = await UserController.updateReview({ id, stars, content, user_id })
 
@@ -240,7 +283,7 @@ router.post('/edit-review', verifyJWT, async (req, res) => {
 router.post('/delete-review', verifyJWT, async (req, res) => {
 
     const id = req.body.id
-    const user_id = req.body.user_id
+    const user_id = req.user_id
 
     const newReview = await UserController.updateReview(id, user_id)
 

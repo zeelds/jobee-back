@@ -5,20 +5,8 @@ const mainRoutes = require('./routes/main/routes');
 const adminRoutes = require('./routes/admin/routes');
 const clientRoutes = require('./routes/client/routes');
 const articleRoutes = require('./routes/article/routes')
+const paymentRoutes = require('./routes/payment/routes')
 const bodyParser = require('body-parser');
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-    destination: (req,file,cb) => {
-        cb(null, 'src/public/media/uploads/')
-    },
-    filename: (req,file,cb) => {
-        cb(null, file.fieldname+'-'+Date.now())
-    }
-})
-
-const upload = multer({storage: storage})
-
 require('./database/db')
 require('./database/start')
 const cors = require('cors');
@@ -31,6 +19,7 @@ app.use('/', mainRoutes)
 app.use('/admin', adminRoutes)
 app.use('/client', clientRoutes)
 app.use('/article', articleRoutes)
+app.use('/payment', paymentRoutes)
 app.use(cors())
 
 app.listen(process.env.SERVER_PORT, () => {

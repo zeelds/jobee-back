@@ -5,6 +5,8 @@ module.exports = {
 
     async createPro(plan,expirationdate, user_id){
 
+        await Pro.destroy({where: {user_id: user_id}})
+
         const newPro = await Pro.create({
             plan: plan,
             begindate: Date.now(),

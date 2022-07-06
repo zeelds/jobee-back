@@ -3,23 +3,15 @@ const UserController = require('../../controllers/UserController');
 const { verifyJWT, creationValidate } = require('./functions');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
+const nodemailer = require("nodemailer");
 
 router.get('/', verifyJWT, (req,res) => {
     return res.json({type: 'success', message: 'Você está autenticado!'})
 })
 
-router.get('/teste', (req,res) => {
-    
-    const teste = jwt.sign({ user_id: '8d2bc591-9aca-4f86-ac3a-d59e02cddcd3' },
-        process.env.SECRET_JWT)
-
-    return res.json(teste)
-
-})
-
 router.post('/register', async (req, res) => {
 
-    const { email, password, repassword, name, birthday, gender } = req.body
+    const { email, password, repassword, name, birthday, gender, unlettered,pronouns,color_blindness } = req.body
 
     const errors = await creationValidate({
         email, password, repassword, name, birthday, gender
@@ -36,10 +28,10 @@ router.post('/register', async (req, res) => {
         const user_id = response.data.id
 
         const newLogin = UserController.createLogin(email, password, user_id)
-        const newAcessibility = UserController.createAccessibility(false, 'Ele', 'Nenhum', user_id)
+        const newAcessibility = UserController.createAccessibility(unlettered, pronouns, color_blindness, user_id)
 
         const verifyToken = jwt.sign(user_id, process.env.SECRET_JWT)
-        //vai ser enviado pro email
+        //vai ser enviado pro email ^^^^^^
 
         return res.json({ message: user_id + ' foi registrado com sucesso!' })
 
@@ -105,11 +97,26 @@ router.get('/verify/:token', async (req, res) => {
 
 })
 
+router.post('/redefine-accessibility', verifyJWT, async (req,res) => {
+
+    const {unlettered,pronouns,color_blindness} = req.body
+
+    const newAcessibility = await UserController.updateAccessibility({unlettered,pronouns,color_blindness,user_id})
+
+    if (newAcessibility.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de acessibilidade.' })
+    }
+
+    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', body: updatedLogin })
+
+})
+
 router.post('/redefine-password', async (req, res) => {
 
-    //Vai enviar algo criptografado aqui e ele vai tentar ser transformado no email
-    //da pessoa
-    const email = req.body.email
+    const token = req.body.token
+    const email = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+        return decoded.email
+    })
     const newPassword = req.body.password
 
     const updatedLogin = await UserController.updateLogin({ password: newPassword, email: email })
@@ -119,6 +126,90 @@ router.post('/redefine-password', async (req, res) => {
     }
 
     return res.json({ type: 'success', message: 'A senha foi redefinida.', body: updatedLogin })
+
+})
+
+router.get('/reviews-list/:user_id', async (req,res) => {
+
+    const user_id = req.params.user_id
+
+    const foundReviews = await UserController.getAllReviews(user_id)
+
+    if (newReview.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    }
+
+    return res.json({ type: 'success', data: foundReviews})
+
+})
+
+router.get('/review/:id', async (req,res) => {
+
+    const id = req.params.id
+
+    const foundReviews = await UserController.getReview(id)
+
+    if (foundReviews.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro ao buscar a avaliação.' })
+    }
+
+    return res.json({type: 'success', data: foundReviews})
+
+})
+
+router.post('/write-review', verifyJWT, async (req,res) => {
+    
+    //fazer um check pra ver se o reviewed n é igual ao reviewers
+
+    const reviewer_id = req.body.user_id
+    const reviewed_id = req.body.reviewed_id
+    const stars = req.body.stars
+    const content = req.body.content
+
+    if(reviewer_id == reviewed_id){
+        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    }
+
+    const newReview = await UserController.createReview(stars, content, reviewed_id, reviewer_id)
+
+    if (newReview.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    }
+
+    return res.json({type: 'success', message: newReview})
+
+})
+
+
+router.post('/edit-review', verifyJWT, async (req,res) => {
+    
+    const id = req.body.id
+    const stars = req.body.stars
+    const content = req.body.content
+    const user_id = req.body.user_id
+
+    const newReview = await UserController.updateReview({id, stars, content, user_id})
+
+    if (newReview.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na atualização da avaliação.' })
+    }
+
+    return res.json({type: 'success', message: newReview})
+
+})
+
+router.post('/delete-review', verifyJWT, async (req,res) => {
+    
+    const id = req.body.id
+    const user_id = req.body.user_id
+
+    const newReview = await UserController.updateReview(id, user_id)
+
+    if (newReview.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro ao excluir esta avaliação.' })
+    }
+
+    return res.json({type: 'success', message: newReview})
 
 })
 

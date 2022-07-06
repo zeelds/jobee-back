@@ -2,6 +2,7 @@ const User = require('../models/User')
 const Login = require('../models/Login')
 const Accessibility = require('../models/Accessibility')
 const Review = require('../models/Review')
+const sequelize = require('sequelize')
 
 module.exports = {
 
@@ -28,14 +29,14 @@ module.exports = {
 
     async updateReview(values){
 
-        const {id, stars, content} = values
+        const {id, stars, content, user_id} = values
 
         const newReview = await Review.update(
             {
                 stars: stars,
                 content: content
             },
-            {where: {id: id}}
+            {where: {id: id, reviewer_id: user_id}}
         )
 
         return {data: newReview, message: 'Avaliação atualizada com sucesso!', status: 200}
@@ -44,7 +45,9 @@ module.exports = {
 
     async getAllReviews(reviewed_id){
 
-        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}})
+        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}, attributes: [
+            [sequelize.fn("avg", sequelize.cast(sequelize.col('stars'), 'integer')), 'avgStars']
+        ]})
 
         return {data: foundReviews, message: 'Busca finalizada com sucesso!', status:200}
 
@@ -58,9 +61,9 @@ module.exports = {
 
     },
 
-    async deleteReview(id){
+    async deleteReview(id, user_id){
 
-        const removedReview = await Review.destroy({where: {id: id}})
+        const removedReview = await Review.destroy({where: {id: id, reviewer_id: user_id}})
 
         return {data: removedReview, message: 'Avaliação excluída com sucesso!', status:200}
 
@@ -82,8 +85,6 @@ module.exports = {
     async updateLogin(values){
 
         const {password, email} = values
-
-        console.log(email)
 
         const newLogin = await Login.update(
             {

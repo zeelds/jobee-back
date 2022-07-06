@@ -34,7 +34,7 @@ module.exports = {
 
     },
 
-    async updateArticle(id, title, content, status, tags){
+    async updateArticle(id, title, content, status, tags, user_id){
 
         const newArticle = await Article.update({
             title: title,
@@ -42,16 +42,16 @@ module.exports = {
             status: status,
             tags: tags
         },{
-            where: {id: id}
+            where: {id: id, user_id: user_id}
         })
 
         return {data: newArticle, message: 'Artigo atualizado com sucesso!', status: 200}
 
     },
 
-    async deleteArticle(id){
+    async deleteArticle(id, user_id){
 
-        const removedArticle = await Article.destroy({where: {id: id}})
+        const removedArticle = await Article.destroy({where: {id: id, user_id: user_id}})
 
         return {data: removedArticle, message: 'Artigo excluído com sucesso!', status: 200}
 
@@ -77,7 +77,7 @@ module.exports = {
 
     },
 
-    async getAllArticleComment(article_id){
+    async getAllArticleComments(article_id){
 
         const foundComments = await Comment.findAll({where:{article_id: article_id}})
 
@@ -93,19 +93,19 @@ module.exports = {
 
     },
 
-    async updateComment(id, content){
+    async updateComment(id, content, user_id){
 
         const newComment = await Comment.update({
             content: content
-        },{where:{id: id}})
+        },{where:{id: id, author_id: user_id}})
 
         return {data: newComment, message: 'Comentário atualizado com sucesso!', status: 200}
 
     },
 
-    async deleteComment(id){
+    async deleteComment(id, user_id){
 
-        const removedComment = await Comment.destroy({where: {id: id}})
+        const removedComment = await Comment.destroy({where: {id: id, author_id: user_id}})
 
         return {data: removedComment, message: 'Comentário deletado com sucesso!', status: 200}
 

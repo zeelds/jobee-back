@@ -103,4 +103,19 @@ function verifyJWT(req,res,next){
     })
 }
 
-module.exports = { verifyJWT, creationValidate }
+function sendVerificationMail(transporter, to,token){
+
+    const mailData = {
+        from: process.env.COMPANY_EMAIL,
+        to: to,
+        subject: 'Verifique a sua conta da plataforma Jobee',
+        text: 'link abaixo!',
+        html: "<b>Olá, esperamos que nossa plataforma supere as suas expectativas! </b><br> Muitíssimo obrigado por se cadastrar e dar seu voto de confiança neste projeto. <br /> Agora você só precisa <b><a href='http://localhost:3001/client/verify/"+token+"'>clicar aqui para verificar sua conta</a></b>!<br/>"
+    };
+
+    transporter.sendMail(mailData)
+
+
+}
+
+module.exports = { verifyJWT, creationValidate, sendVerificationMail }

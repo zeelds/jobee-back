@@ -1,6 +1,6 @@
 const express = require('express');
 const UserController = require('../../controllers/UserController');
-const { verifyJWT, creationValidate } = require('./functions');
+const { verifyJWT, creationValidate, sendVerificationMail } = require('./functions');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
@@ -20,26 +20,6 @@ router.get('/', verifyJWT, (req, res) => {
 })
 
 //Envio de e-mail, testes:
-
-router.get('/send-mail', (req, res) => {
-
-    const mailData = {
-        from: process.env.COMPANY_EMAIL,
-        to: process.env.COMPANY_EMAIL,
-        subject: 'testando aqui alo',
-        text: 'teu codigo aqui paixao!',
-        html: '<b>oi amor! </b><br> testando nodemailer aqui hein<br/>',
-    };
-
-    transporter.sendMail(mailData, (error, info) => {
-        if (error) {
-            return res.json({ type: 'error', message: error, status: 500 })
-        }
-
-        return res.json({ type: 'success', message: 'O email foi enviado com sucesso!', status: 200 })
-    })
-
-})
 
 router.post('/register', async (req, res) => {
 
@@ -62,17 +42,9 @@ router.post('/register', async (req, res) => {
         const newLogin = UserController.createLogin(email, password, user_id)
         const newAcessibility = UserController.createAccessibility(unlettered, pronouns, color_blindness, user_id)
 
-        const verifyToken = jwt.sign({verify_user_id: user_id}, process.env.SECRET_JWT, {expiresIn: 2700})
+        const verifyToken = jwt.sign({ verify_user_id: user_id }, process.env.SECRET_JWT, { expiresIn: 2700 })
 
-        const mailData = {
-            from: process.env.COMPANY_EMAIL,
-            to: email,
-            subject: 'Verifique a sua conta da plataforma Jobee',
-            text: 'link abaixo!',
-            html: "<b>Opa! </b><br> <a href='https://localhost:3001/client/verify/"+verifyToken+"'>Clique aqui para verificar</a><br/>"
-        };
-    
-        transporter.sendMail(mailData)
+        sendVerificationMail(transporter, email, verifyToken)
 
         return res.json({ message: user_id + ' foi registrado com sucesso!' })
 
@@ -100,6 +72,11 @@ router.post('/auth', async (req, res) => {
     ) {
 
         if (!combination.isverified) {
+
+            const verifyToken = jwt.sign({ verify_user_id: combination.data.user_id }, process.env.SECRET_JWT, { expiresIn: 2700 })
+
+            sendVerificationMail(transporter, email, verifyToken)
+
             return res.json({ auth: false, type: 'error', message: 'A conta precisa ser ativada, verifique o seu email!' })
         }
 
@@ -125,7 +102,7 @@ router.get('/verify/:token', async (req, res) => {
     const token = req.params.token
 
     const user_id = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
-        if(err){
+        if (err) {
             return res.json('Esse código de verificação expirou...')
         }
 

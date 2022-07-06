@@ -3,7 +3,7 @@ const router = express.Router();
 const { verifyJWT_admin } = require('../client/functions.js');
 const ProController = require('../../controllers/ProController.js');
 
-router.get('/', async (req, res) => {
+router.get('/', verifyJWT_admin, async (req, res) => {
 
     const foundProUsers = await ProController.getAllPro()
 

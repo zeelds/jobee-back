@@ -211,6 +211,21 @@ router.post('/redefine-password', async (req, res) => {
 
 })
 
+router.get('/get-user/:id', async (req, res) => {
+
+    const id = req.params.id
+
+    const foundUser = await UserController.getUser(id)
+
+    const isPro = await checkPro(['Padrão','Investido','Profissional'])
+
+    return res.json({type: 'success', message: 'Usuário encontrado', data: {
+        foundUser: foundUser,
+        isPro: isPro
+    }})
+
+})
+
 router.get('/reviews-list/:user_id', async (req, res) => {
 
     const user_id = req.params.user_id

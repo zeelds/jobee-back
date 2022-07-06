@@ -6,10 +6,23 @@ const adminRoutes = require('./routes/admin/routes');
 const clientRoutes = require('./routes/client/routes');
 const articleRoutes = require('./routes/article/routes')
 const bodyParser = require('body-parser');
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+    destination: (req,file,cb) => {
+        cb(null, 'src/public/media/uploads/')
+    },
+    filename: (req,file,cb) => {
+        cb(null, file.fieldname+'-'+Date.now())
+    }
+})
+
+const upload = multer({storage: storage})
+
 require('./database/db')
 require('./database/start')
 const cors = require('cors');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));

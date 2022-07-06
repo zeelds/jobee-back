@@ -8,6 +8,8 @@ router.post('/', (req,res) => {
 })
 
 router.post('/create-article', verifyJWT, async (req,res) => {
+
+    //if user é premium, pode colocar textos maiores, se n vai dar erro se tiver mt longo
     
     const {title,content,status,tags} = req.body
     const user_id = req.body.user_id
@@ -18,6 +20,8 @@ router.post('/create-article', verifyJWT, async (req,res) => {
 })
 
 router.post('/update-article', verifyJWT, async (req,res) => {
+
+    //if user é premium, pode editar o texto do artigo, se n, n vai rolar
     
     const {id,title,content,status,tags} = req.body
     const user_id = req.body.user_id
@@ -111,6 +115,8 @@ router.post('/delete-comment', verifyJWT, async (req,res) => {
 })
 
 router.get('/comment/:id', async (req,res) => {
+
+    //if user é premium, pode editar o texto do comentario, se n, n vai rolar
     
     const id = req.params.id
 

@@ -103,6 +103,17 @@ function verifyJWT(req,res,next){
     })
 }
 
+
+function verifyJWT_admin(req,res,next){
+    const token = req.headers['x-access-token']
+    jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+        if(err) return res.status(401).json({auth: false, message: 'Você precisa estar autenticado como admin para acessar essa rota.'});
+
+        req.isAdmin = decoded.isAdmin
+        next()
+    })
+}
+
 function sendVerificationMail(transporter, to,token){
 
     const mailData = {
@@ -118,4 +129,4 @@ function sendVerificationMail(transporter, to,token){
 
 }
 
-module.exports = { verifyJWT, creationValidate, sendVerificationMail }
+module.exports = { verifyJWT, creationValidate, sendVerificationMail, verifyJWT_admin }

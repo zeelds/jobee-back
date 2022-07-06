@@ -217,7 +217,7 @@ router.get('/get-user/:id', async (req, res) => {
 
     const foundUser = await UserController.getUser(id)
 
-    const isPro = await checkPro(['Padrão','Investido','Profissional'])
+    const isPro = await checkPro(['Padrão','Investido','Profissional'], id)
 
     return res.json({type: 'success', message: 'Usuário encontrado', data: {
         foundUser: foundUser,

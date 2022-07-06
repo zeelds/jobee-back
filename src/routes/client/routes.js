@@ -124,12 +124,12 @@ router.post('/upload-avatar', upload.single('avatar'), verifyJWT, async (req, re
 
     const user_id = req.user_id
 
-    const isPro = await checkPro(['Profissional', 'Investido'], user_id)
+    const isPro = await checkPro(['Investido','Profissional','Padrão'], user_id)
 
     if (
         isPro == false
         &&
-        req.file.mimetype == 'gif'
+        req.file.mimetype == 'image/gif'
     ) {
         return res.json(
             {

@@ -5,13 +5,45 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
 
-router.get('/', verifyJWT, (req,res) => {
-    return res.json({type: 'success', message: 'Você está autenticado!'})
+const transporter = nodemailer.createTransport({
+    port: 465,
+    host: "smtp.gmail.com",
+    auth: {
+        user: process.env.COMPANY_EMAIL,
+        pass: process.env.COMPANY_PASSWORD,
+    },
+    secure: true,
+});
+
+router.get('/', verifyJWT, (req, res) => {
+    return res.json({ type: 'success', message: 'Você está autenticado!' })
+})
+
+//Envio de e-mail, testes:
+
+router.get('/send-mail', (req, res) => {
+
+    const mailData = {
+        from: process.env.COMPANY_EMAIL,
+        to: process.env.COMPANY_EMAIL,
+        subject: 'testando aqui alo',
+        text: 'teu codigo aqui paixao!',
+        html: '<b>oi amor! </b><br> testando nodemailer aqui hein<br/>',
+    };
+
+    transporter.sendMail(mailData, (error, info) => {
+        if (error) {
+            return res.json({ type: 'error', message: error, status: 500 })
+        }
+
+        return res.json({ type: 'success', message: 'O email foi enviado com sucesso!', status: 200 })
+    })
+
 })
 
 router.post('/register', async (req, res) => {
 
-    const { email, password, repassword, name, birthday, gender, unlettered,pronouns,color_blindness } = req.body
+    const { email, password, repassword, name, birthday, gender, unlettered, pronouns, color_blindness } = req.body
 
     const errors = await creationValidate({
         email, password, repassword, name, birthday, gender
@@ -30,8 +62,17 @@ router.post('/register', async (req, res) => {
         const newLogin = UserController.createLogin(email, password, user_id)
         const newAcessibility = UserController.createAccessibility(unlettered, pronouns, color_blindness, user_id)
 
-        const verifyToken = jwt.sign(user_id, process.env.SECRET_JWT)
-        //vai ser enviado pro email ^^^^^^
+        const verifyToken = jwt.sign({verify_user_id: user_id}, process.env.SECRET_JWT, {expiresIn: 2700})
+
+        const mailData = {
+            from: process.env.COMPANY_EMAIL,
+            to: email,
+            subject: 'Verifique a sua conta da plataforma Jobee',
+            text: 'link abaixo!',
+            html: "<b>Opa! </b><br> <a href='https://localhost:3001/client/verify/"+verifyToken+"'>Clique aqui para verificar</a><br/>"
+        };
+    
+        transporter.sendMail(mailData)
 
         return res.json({ message: user_id + ' foi registrado com sucesso!' })
 
@@ -58,14 +99,14 @@ router.post('/auth', async (req, res) => {
         password == combination.data.password
     ) {
 
-        if(!combination.isverified){
+        if (!combination.isverified) {
             return res.json({ auth: false, type: 'error', message: 'A conta precisa ser ativada, verifique o seu email!' })
         }
 
         const token = jwt.sign(
             { user_id: combination.data.user_id },
             process.env.SECRET_JWT,
-            {expiresIn: 3000}
+            { expiresIn: 3000 }
         );
 
         return res.json({ auth: true, token: token })
@@ -83,8 +124,12 @@ router.get('/verify/:token', async (req, res) => {
 
     const token = req.params.token
 
-    const user_id = jwt.verify(token, process.env.SECRET_JWT, (err, decoded)=>{
-        return decoded.user_id
+    const user_id = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+        if(err){
+            return res.json('Esse código de verificação expirou...')
+        }
+
+        return decoded.verify_user_id
     })
 
     const updatedVerify = await UserController.updateVerifiedStatus({ isverified: true, user_id: user_id.toString() })
@@ -97,11 +142,11 @@ router.get('/verify/:token', async (req, res) => {
 
 })
 
-router.post('/redefine-accessibility', verifyJWT, async (req,res) => {
+router.post('/redefine-accessibility', verifyJWT, async (req, res) => {
 
-    const {unlettered,pronouns,color_blindness} = req.body
+    const { unlettered, pronouns, color_blindness } = req.body
 
-    const newAcessibility = await UserController.updateAccessibility({unlettered,pronouns,color_blindness,user_id})
+    const newAcessibility = await UserController.updateAccessibility({ unlettered, pronouns, color_blindness, user_id })
 
     if (newAcessibility.data == 0) {
         return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de acessibilidade.' })
@@ -129,7 +174,7 @@ router.post('/redefine-password', async (req, res) => {
 
 })
 
-router.get('/reviews-list/:user_id', async (req,res) => {
+router.get('/reviews-list/:user_id', async (req, res) => {
 
     const user_id = req.params.user_id
 
@@ -139,11 +184,11 @@ router.get('/reviews-list/:user_id', async (req,res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
     }
 
-    return res.json({ type: 'success', data: foundReviews})
+    return res.json({ type: 'success', data: foundReviews })
 
 })
 
-router.get('/review/:id', async (req,res) => {
+router.get('/review/:id', async (req, res) => {
 
     const id = req.params.id
 
@@ -153,12 +198,12 @@ router.get('/review/:id', async (req,res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro ao buscar a avaliação.' })
     }
 
-    return res.json({type: 'success', data: foundReviews})
+    return res.json({ type: 'success', data: foundReviews })
 
 })
 
-router.post('/write-review', verifyJWT, async (req,res) => {
-    
+router.post('/write-review', verifyJWT, async (req, res) => {
+
     //fazer um check pra ver se o reviewed n é igual ao reviewers
 
     const reviewer_id = req.body.user_id
@@ -166,7 +211,7 @@ router.post('/write-review', verifyJWT, async (req,res) => {
     const stars = req.body.stars
     const content = req.body.content
 
-    if(reviewer_id == reviewed_id){
+    if (reviewer_id == reviewed_id) {
         return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
     }
 
@@ -176,30 +221,30 @@ router.post('/write-review', verifyJWT, async (req,res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
     }
 
-    return res.json({type: 'success', message: newReview})
+    return res.json({ type: 'success', message: newReview })
 
 })
 
 
-router.post('/edit-review', verifyJWT, async (req,res) => {
-    
+router.post('/edit-review', verifyJWT, async (req, res) => {
+
     const id = req.body.id
     const stars = req.body.stars
     const content = req.body.content
     const user_id = req.body.user_id
 
-    const newReview = await UserController.updateReview({id, stars, content, user_id})
+    const newReview = await UserController.updateReview({ id, stars, content, user_id })
 
     if (newReview.data == 0) {
         return res.json({ type: 'error', message: 'Ocorreu algum erro na atualização da avaliação.' })
     }
 
-    return res.json({type: 'success', message: newReview})
+    return res.json({ type: 'success', message: newReview })
 
 })
 
-router.post('/delete-review', verifyJWT, async (req,res) => {
-    
+router.post('/delete-review', verifyJWT, async (req, res) => {
+
     const id = req.body.id
     const user_id = req.body.user_id
 
@@ -209,7 +254,7 @@ router.post('/delete-review', verifyJWT, async (req,res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro ao excluir esta avaliação.' })
     }
 
-    return res.json({type: 'success', message: newReview})
+    return res.json({ type: 'success', message: newReview })
 
 })
 

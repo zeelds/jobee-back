@@ -3,12 +3,12 @@ const Pro = require("../models/Pro");
 
 module.exports = {
 
-    async createPro(plan,expirationDate, user_id){
+    async createPro(plan,expirationdate, user_id){
 
         const newPro = await Pro.create({
             plan: plan,
-            beginDate: Date.now(),
-            expirationDate,
+            begindate: Date.now(),
+            expirationdate,
             user_id: user_id
         })
 
@@ -34,11 +34,11 @@ module.exports = {
         
     },
 
-    async updatePro(plan,expirationDate, user_id){
+    async updatePro(plan,expirationdate, user_id){
 
         const updatedPro = await Pro.update({
             plan: plan,
-            expirationDate: expirationDate
+            expirationDate: expirationdate
         },{
             where: {user_id: user_id}
         })

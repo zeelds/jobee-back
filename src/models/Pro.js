@@ -13,10 +13,10 @@ const Pro = database.define('Pro', {
         type: DataTypes.ENUM('Nenhum','Padrão', 'Investido', 'Profissional'),
         defaultValue: 'Nenhum'
     },
-    beginDate: {
+    begindate: {
         type: DataTypes.DATE,
     },
-    expirationDate: {
+    expirationdate: {
         type: DataTypes.DATE,
     },
     user_id: {

@@ -13,20 +13,20 @@ module.exports = {
         type: Sequelize.ENUM('Nenhum', 'Padrão', 'Investido', 'Profissional'),
         defaultValue: 'Nenhum'
       },
-      beginDate: {
+      begindate: {
         type: Sequelize.DATE,
       },
-      expirationDate: {
+      expirationdate: {
         type: Sequelize.DATE,
       },
       user_id: {
-        type: DataTypes.UUID
+        type: Sequelize.UUID
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

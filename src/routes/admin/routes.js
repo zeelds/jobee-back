@@ -12,17 +12,17 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/create-pro-user', verifyJWT_admin, async (req,res) => {
-    const {plan,expirationDate,user_id} = req.body
+    const {plan,expirationdate,user_id} = req.body
 
-    const newProUser = await ProController.createPro(plan,expirationDate, user_id)
+    const newProUser = await ProController.createPro(plan,expirationdate, user_id)
 
     return res.json({data: newProUser, message: 'Usuário Pro criado com sucesso', status: 200})
 })
 
 router.post('/update-pro-user', verifyJWT_admin, async (req,res) => {
-    const {plan,expirationDate,user_id} = req.body
+    const {plan,expirationdate,user_id} = req.body
 
-    const updatedProUser = await ProController.updatePro(plan,expirationDate,user_id)
+    const updatedProUser = await ProController.updatePro(plan,expirationdate,user_id)
 
     return res.json({data: updatedProUser, message: 'Usuário Pro atualizado com sucesso', status: 200})
 })

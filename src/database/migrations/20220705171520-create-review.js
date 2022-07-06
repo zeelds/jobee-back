@@ -22,6 +22,14 @@ module.exports = {
       },
       reviewer_id: {
         type: Sequelize.UUID
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

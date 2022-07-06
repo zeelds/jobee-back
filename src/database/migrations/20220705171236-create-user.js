@@ -46,6 +46,14 @@ module.exports = {
       ban_info: {
         type: Sequelize.JSON,
         allowNull: true
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

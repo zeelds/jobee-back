@@ -71,7 +71,7 @@ router.post('/auth', async (req, res) => {
         password == combination.data.password
     ) {
 
-        if (!combination.isverified) {
+        if (!combination.data.isverified) {
 
             const verifyToken = jwt.sign({ verify_user_id: combination.data.user_id }, process.env.SECRET_JWT, { expiresIn: 2700 })
 

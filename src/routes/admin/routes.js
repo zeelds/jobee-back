@@ -1,31 +1,38 @@
 const express = require('express')
 const router = express.Router();
-const UserController = require('../../controllers/UserController.js');
 const { verifyJWT_admin } = require('../client/functions.js');
-const jwt = require('jsonwebtoken')
+const ProController = require('../../controllers/ProController.js');
 
-router.get('/', verifyJWT_admin, async (req, res) => {
+router.get('/', async (req, res) => {
 
-    return res.json('vc está autenticadx na rota admin')
-    //const Users = await UserController.teste()
-    //return res.json(Users)
+    const foundProUsers = await ProController.getAllPro()
+
+    return res.json({data: foundProUsers})
 
 })
 
-router.post('/create-pro-user', verifyJWT_admin, (req,res) => {
-    return res.json('vc está autenticadx na rota')
+router.post('/create-pro-user', verifyJWT_admin, async (req,res) => {
+    const {plan,expirationDate,user_id} = req.body
+
+    const newProUser = await ProController.createPro(plan,expirationDate, user_id)
+
+    return res.json({data: newProUser, message: 'Usuário Pro criado com sucesso', status: 200})
 })
 
-router.post('/update-pro-user', verifyJWT_admin, (req,res) => {
-    return res.json('vc está autenticadx na rota')
+router.post('/update-pro-user', verifyJWT_admin, async (req,res) => {
+    const {plan,expirationDate,user_id} = req.body
+
+    const updatedProUser = await ProController.updatePro(plan,expirationDate,user_id)
+
+    return res.json({data: updatedProUser, message: 'Usuário Pro atualizado com sucesso', status: 200})
 })
 
-router.post('/pro-users', verifyJWT_admin, (req,res) => {
-    return res.json('mostra todos os usuários pro')
-})
+router.post('/delete-pro-user', verifyJWT_admin, async (req,res) => {
+    const user_id = req.body.user_id
 
-router.post('/delete-pro-user', verifyJWT_admin, (req,res) => {
-    return res.json('vc está autenticadx na rota')
+    const deletedProUser = await ProController.deletePro(user_id)
+
+    return res.json({data: deletedProUser, message: 'Usuário Pro deletado com sucesso', status: 200})
 })
 
 module.exports = router

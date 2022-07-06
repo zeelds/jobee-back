@@ -18,6 +18,11 @@ const Pro = database.define('Pro', {
     },
     expirationDate: {
         type: DataTypes.DATE,
+    },
+    user_id: {
+        type: DataTypes.UUID,
+        references: 'User',
+        referencesKey: 'id'
     }
 })
 

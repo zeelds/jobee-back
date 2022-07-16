@@ -31,10 +31,14 @@ router.post('/register', async (req, res) => {
     })
 
     if (errors != false) {
+        console.log(errors)
         return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.' })
     }
 
-    const newUser = UserController.createUser(name, gender, birthday)
+    const [day, month, year] = birthday.split('/')
+    const formattedBirthday = new Date(year,month-1,day)
+
+    const newUser = UserController.createUser(name, gender, formattedBirthday)
 
     newUser.then((response) => {
 

@@ -11,6 +11,7 @@ require('./database/db')
 require('./database/start')
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+app.use(cors())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,7 +21,6 @@ app.use('/admin', adminRoutes)
 app.use('/client', clientRoutes)
 app.use('/article', articleRoutes)
 app.use('/payment', paymentRoutes)
-app.use(cors())
 
 app.listen(process.env.SERVER_PORT, () => {
     console.log(`Servidor iniciado na porta ${process.env.SERVER_PORT}`)

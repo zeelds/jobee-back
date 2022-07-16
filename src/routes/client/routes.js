@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
     })
 
     if (errors != false) {
-        return res.json({ type: 'error', message: errors })
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.' })
     }
 
     const newUser = UserController.createUser(name, gender, birthday)
@@ -47,14 +47,13 @@ router.post('/register', async (req, res) => {
 
         sendVerificationMail(transporter, email, verifyToken)
 
-        return res.json({ message: user_id + ' foi registrado com sucesso!' })
+        return res.json({ type: 'success', message: 'Você foi registrado com sucesso, verifique seu email!'})
 
     }).catch((errors) => {
 
-        return res.json({ type: 'error', errors: errors })
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.', errors: errors })
 
     })
-
 
 })
 

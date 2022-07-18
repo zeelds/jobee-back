@@ -84,9 +84,6 @@ async function creationValidate(values) {
         errors.push({
             where: 'password',
             content: 'As senhas não coincidem.'
-        }, {
-            where: 'repassword',
-            content: 'As senhas não coincidem.'
         })
     };
 

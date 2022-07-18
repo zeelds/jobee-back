@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
 
     if (errors != false) {
         console.log(errors)
-        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.' })
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.', errors: errors})
     }
 
     const [day, month, year] = birthday.split('/')

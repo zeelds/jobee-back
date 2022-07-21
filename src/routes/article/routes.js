@@ -55,7 +55,7 @@ router.post('/delete-article', verifyJWT, async (req,res) => {
 
 })
 
-router.get('/article/:id', async (req,res) => {
+router.get('/find-article/:id', async (req,res) => {
     
     const id = req.params.id
 

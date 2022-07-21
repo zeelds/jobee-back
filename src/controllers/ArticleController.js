@@ -28,7 +28,7 @@ module.exports = {
 
     async getAllArticles(author_id){
 
-        const foundArticle = await Article.findAll({where: {author_id: author_id}})
+        const foundArticle = await Article.findAll({where: {author_id: author_id}, order: [['created_at', 'desc']]})
 
         return {data: foundArticle, message: 'Busca finalizada com sucesso!', status: 200}
 

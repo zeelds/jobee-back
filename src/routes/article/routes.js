@@ -65,6 +65,16 @@ router.get('/article/:id', async (req,res) => {
 
 })
 
+router.get('/articles-list', verifyJWT, async (req,res) => {
+    
+    const user_id = req.user_id
+
+    const newArticle = await ArticleController.getAllArticles(user_id)
+
+    return res.json({data: newArticle, message: 'Artigos encontrados com sucesso!', status: 200})
+
+})
+
 router.get('/articles-list/:user_id', async (req,res) => {
     
     const user_id = req.params.user_id

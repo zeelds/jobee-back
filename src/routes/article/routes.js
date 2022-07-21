@@ -30,16 +30,18 @@ router.post('/update-article', verifyJWT, async (req,res) => {
 
     //if user é premium, pode editar o texto do artigo, se n, n vai rolar
     
-    const {id,title,content,status,tags} = req.body
-    const user_id = req.user_id
+    console.log(req.body)
 
-    const isAllowed = checkPro(mustBe=['Profissional','Investido'], user_id=user_id)
+    const {id,title,content,status,tags} = req.body
+    const reqid = req.user_id
+
+    const isAllowed = checkPro(mustBe=['Profissional','Investido'], user_id=reqid)
 
     if(!isAllowed){
         return res.json({type: 'error', message: 'Você deve ser um Usuário Pro de nível Investido ou Profissional!', status: 200})
     }
 
-    const updatedArticle = await ArticleController.updateArticle(id,title,content,status,tags,user_id)
+    const updatedArticle = await ArticleController.updateArticle(id,title,content,status,tags,reqid)
 
     return res.json({type: 'success', data: updatedArticle, message: 'Artigo atualizado com sucesso!', status: 200})
 })

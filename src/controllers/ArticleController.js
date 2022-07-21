@@ -42,7 +42,7 @@ module.exports = {
             status: status,
             tags: tags
         },{
-            where: {id: id, user_id: user_id}
+            where: {id: id, author_id: user_id}
         })
 
         return {data: newArticle, message: 'Artigo atualizado com sucesso!', status: 200}

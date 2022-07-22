@@ -13,7 +13,7 @@ const Accessibility = database.define('Accessibility', {
         type: DataTypes.BOOLEAN
     },
     pronouns: {
-        type: DataTypes.ENUM('Ele', 'Ela', 'Elu')
+        type: DataTypes.ENUM('Ele/Dele', 'Ela/Dela', 'Elu/Delu')
     },
     color_blindness: {
         type: DataTypes.ENUM('Nenhum','Deuteranomalia', 'Protanomalia', 

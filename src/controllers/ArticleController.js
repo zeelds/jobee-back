@@ -51,7 +51,7 @@ module.exports = {
 
     async deleteArticle(id, user_id){
 
-        const removedArticle = await Article.destroy({where: {id: id, user_id: user_id}})
+        const removedArticle = await Article.destroy({where: {id: id, author_id: user_id}})
 
         return {data: removedArticle, message: 'Artigo excluído com sucesso!', status: 200}
 

@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       pronouns: {
-        type: Sequelize.ENUM('Ele', 'Ela', 'Elu')
+        type: Sequelize.ENUM('Ele/Dele', 'Ela/Dela', 'Elu/Delu')
       },
       color_blindness: {
-        type: Sequelize.ENUM('Deuteranomalia', 'Protanomalia',
+        type: Sequelize.ENUM('Nenhum','Deuteranomalia', 'Protanomalia',
           'Protanopia', 'Deuteranopia',
           'Tritanomalia', 'Tritanopia',
           'Total'

@@ -21,7 +21,7 @@ const User = database.define('User', {
     },
     avatar: {
         type: DataTypes.STRING,
-        defaultValue: 'default.png'
+        defaultValue: '/avatar/default.png'
     },
     isverified: {
         type: DataTypes.BOOLEAN,

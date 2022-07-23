@@ -21,7 +21,7 @@ module.exports = {
       },
       avatar: {
         type: Sequelize.STRING,
-        defaultValue: 'default.png'
+        defaultValue: '/avatar/default.png'
       },
       isverified: {
         type: Sequelize.BOOLEAN,

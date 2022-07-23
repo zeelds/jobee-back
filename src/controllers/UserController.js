@@ -189,7 +189,7 @@ module.exports = {
 
         const foundUser = await User.findOne({where: {id: id}})
 
-        return {message: foundUser, status:200}
+        return {data: foundUser, status:200}
 
     },
 

@@ -175,7 +175,7 @@ router.post('/redefine-accessibility', verifyJWT, async (req, res) => {
         return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de acessibilidade.' })
     }
 
-    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', body: newAcessibility })
+    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', data: newAcessibility })
 
 })
 
@@ -186,10 +186,10 @@ router.get('/get-accessibility', verifyJWT, async (req, res) => {
     const foundAccessibility = await UserController.getAccessibility(user_id)
 
     if (foundAccessibility.data == 0) {
-        return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de acessibilidade.' })
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na busca de acessibilidade.' })
     }
 
-    return res.json({ type: 'success', message: 'A acessibilidade foi redefinida.', body: foundAccessibility })
+    return res.json({ type: 'success', message: 'A acessibilidade foi buscada.', data: foundAccessibility })
 
 })
 
@@ -239,6 +239,25 @@ router.get('/get-user/:id', async (req, res) => {
     return res.json({type: 'success', message: 'Usuário encontrado', data: {
         foundUser: foundUser,
         isPro: isPro
+    }})
+
+})
+
+router.get('/get-user', verifyJWT, async (req, res) => {
+
+    const user_id = req.user_id
+
+    const foundUser = await UserController.getUser(user_id)
+
+    const isProInvested = await checkPro(['Investido'], user_id)
+    const isProProfessional = await checkPro(['Investido'], user_id)
+
+    return res.json({type: 'success', message: 'Usuário encontrado', data: {
+        foundUser: foundUser,
+        proStatus: {
+            invested: isProInvested,
+            professional: isProProfessional
+        }
     }})
 
 })

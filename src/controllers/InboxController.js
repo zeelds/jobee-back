@@ -15,7 +15,7 @@ module.exports = {
 
         const {target_id} = values
 
-        const foundInbox = await Inbox.findAll({where: {target_id: target_id}})
+        const foundInbox = await Inbox.findAll({where: {target_id: target_id}, order: [['created_at', 'desc']]})
 
         return foundInbox
 

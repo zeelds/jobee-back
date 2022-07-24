@@ -20,6 +20,10 @@ router.get('/', verifyJWT, (req, res) => {
     return res.json({ type: 'success', message: 'Você está autenticado!' })
 })
 
+router.get('/refresh-token', verifyJWT, (req, res) => {
+    return res.json(req.user_id)
+})
+
 //Envio de e-mail, testes:
 
 router.post('/register', async (req, res) => {

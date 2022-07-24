@@ -13,6 +13,7 @@ require('./database/start')
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 app.use(cors())
+app.use('/', express.static(__dirname + '/public'));
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));

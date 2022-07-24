@@ -36,7 +36,7 @@ module.exports = {
         allowNull: false
       },
       contact: {
-        type: Sequelize.JSON,
+        type: Sequelize.STRING,
         allowNull: true
       },
       tags: {

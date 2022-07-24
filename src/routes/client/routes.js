@@ -199,11 +199,11 @@ router.get('/get-accessibility', verifyJWT, async (req, res) => {
 
 router.post('/redefine-user', verifyJWT, async (req, res) => {
 
-    const { name, title, biography, gender, birthday, contact, tags } = req.body
+    const { name, avatar, title, biography, gender, birthday, contact, tags } = req.body
     const id = req.user_id
 
     const newUser = await UserController.updateUser({
-        id, name, title, biography, isverified: false, gender, birthday, contact, tags
+        id, avatar, name, title, biography, isverified: false, gender, birthday, contact, tags
     })
 
     if (newUser.data == 0) {

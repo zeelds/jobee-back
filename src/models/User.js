@@ -36,7 +36,7 @@ const User = database.define('User', {
         allowNull: false
     },
     contact: {
-        type: DataTypes.JSON,
+        type: DataTypes.STRING,
         allowNull: true
     },
     tags: {

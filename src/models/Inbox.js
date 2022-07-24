@@ -9,6 +9,10 @@ const Inbox = database.define('Pro', {
         unique: true,
         defaultValue: DataTypes.UUIDV4
     },
+    target_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false

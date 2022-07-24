@@ -45,9 +45,7 @@ module.exports = {
 
     async getAllReviews(reviewed_id){
 
-        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}, attributes: [
-            [sequelize.fn("avg", sequelize.cast(sequelize.col('stars'), 'integer')), 'avgStars']
-        ]})
+        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}})
 
         return {data: foundReviews, message: 'Busca finalizada com sucesso!', status:200}
 

@@ -276,6 +276,20 @@ router.get('/reviews-list/:user_id', async (req, res) => {
 
 })
 
+router.get('/reviews-list', verifyJWT, async (req, res) => {
+
+    const user_id = req.user_id
+
+    const foundReviews = await UserController.getAllReviews(user_id)
+
+    if (foundReviews.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    }
+
+    return res.json({ type: 'success', data: foundReviews })
+
+})
+
 router.get('/review/:id', async (req, res) => {
 
     const id = req.params.id

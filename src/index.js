@@ -5,6 +5,7 @@ const mainRoutes = require('./routes/main/routes');
 const adminRoutes = require('./routes/admin/routes');
 const clientRoutes = require('./routes/client/routes');
 const articleRoutes = require('./routes/article/routes')
+const inboxRoutes = require('./routes/inbox/routes')
 const paymentRoutes = require('./routes/payment/routes')
 const bodyParser = require('body-parser');
 require('./database/db')
@@ -17,6 +18,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/', mainRoutes)
+app.use('/inbox', inboxRoutes)
 app.use('/admin', adminRoutes)
 app.use('/client', clientRoutes)
 app.use('/article', articleRoutes)

@@ -9,18 +9,18 @@ router.get('/get-inbox', verifyJWT, async(req,res)=>{
 
     const foundInbox = InboxController.getAllInbox({target_id: user_id})
 
-    return foundInbox
+    return res.json(foundInbox)
 
 })
 
-router.create('/create-inbox', verifyJWT, async(req,res)=>{
+router.post('/create-inbox', verifyJWT, async(req,res)=>{
 
     const user_id = req.user_id
     const {content, title} = req.body
 
     const createdInbox = InboxController.createInbox({target_id: user_id , content, title})
 
-    return createdInbox
+    return res.json(createdInbox)
     
 })
 
@@ -32,7 +32,7 @@ router.get('/delete-inbox', verifyJWT, async(req,res)=>{
 
     const deletedInbox = InboxController.getAllInbox({where: {target_id: user_id, id: id}})
 
-    return deletedInbox
+    return res.json(deletedInbox)
 
 })
 

@@ -79,7 +79,7 @@ module.exports = {
 
     async getAllArticleComments(article_id){
 
-        const foundComments = await Comment.findAll({where:{article_id: article_id}})
+        const foundComments = await Comment.findAll({where:{article_id: article_id}, order: [['created_at', 'desc']]})
 
         return {data: foundComments, message: 'Busca finalizada com sucesso!', status: 200}
 

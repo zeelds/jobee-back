@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
 const upload = require('../../config/multer');
+const InboxController = require('../../controllers/InboxController');
 
 const transporter = nodemailer.createTransport({
     port: 465,
@@ -36,11 +37,11 @@ router.post('/register', async (req, res) => {
 
     if (errors != false) {
         console.log(errors)
-        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.', errors: errors})
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na criação, verifique os campos novamente.', errors: errors })
     }
 
     const [day, month, year] = birthday.split('/')
-    const formattedBirthday = new Date(year,month-1,day)
+    const formattedBirthday = new Date(year, month - 1, day)
 
     const newUser = UserController.createUser(name, gender, formattedBirthday)
 
@@ -55,7 +56,7 @@ router.post('/register', async (req, res) => {
 
         sendVerificationMail(transporter, email, verifyToken)
 
-        return res.json({ type: 'success', message: 'Você foi registrado com sucesso, verifique seu email!'})
+        return res.json({ type: 'success', message: 'Você foi registrado com sucesso, verifique seu email!' })
 
     }).catch((errors) => {
 
@@ -118,6 +119,13 @@ router.get('/verify/:token', async (req, res) => {
     })
 
     const updatedVerify = await UserController.updateVerifiedStatus({ isverified: true, user_id: user_id.toString() })
+    await InboxController.createInbox(
+        {
+            target_id: user_id,
+            content: 'Seja bem-vindo/bem-vinda/bem-vinde ao Jobee, plataforma pensada para você por pessoas como você.',
+            title: 'Boas vindas!'
+        }
+    )
 
     if (updatedVerify.data == 0) {
         return res.json({ type: 'error', message: 'Essa conta não pôde ser verificada no momento.' })
@@ -131,7 +139,7 @@ router.post('/upload-avatar', upload.single('avatar'), verifyJWT, async (req, re
 
     const user_id = req.user_id
 
-    const isPro = await checkPro(['Investido','Profissional','Padrão'], user_id)
+    const isPro = await checkPro(['Investido', 'Profissional', 'Padrão'], user_id)
 
     if (
         isPro == false
@@ -253,12 +261,14 @@ router.get('/get-user/:id', async (req, res) => {
 
     const foundUser = await UserController.getUser(id)
 
-    const isPro = await checkPro(['Padrão','Investido','Profissional'], id)
+    const isPro = await checkPro(['Padrão', 'Investido', 'Profissional'], id)
 
-    return res.json({type: 'success', message: 'Usuário encontrado', data: {
-        foundUser: foundUser,
-        isPro: isPro
-    }})
+    return res.json({
+        type: 'success', message: 'Usuário encontrado', data: {
+            foundUser: foundUser,
+            isPro: isPro
+        }
+    })
 
 })
 
@@ -271,13 +281,15 @@ router.get('/get-user', verifyJWT, async (req, res) => {
     const isProInvested = await checkPro(['Investido'], user_id)
     const isProProfessional = await checkPro(['Profissional'], user_id)
 
-    return res.json({type: 'success', message: 'Usuário encontrado', data: {
-        foundUser: foundUser,
-        proStatus: {
-            invested: isProInvested,
-            professional: isProProfessional
+    return res.json({
+        type: 'success', message: 'Usuário encontrado', data: {
+            foundUser: foundUser,
+            proStatus: {
+                invested: isProInvested,
+                professional: isProProfessional
+            }
         }
-    }})
+    })
 
 })
 
@@ -328,10 +340,9 @@ router.post('/write-review', verifyJWT, async (req, res) => {
     const stars = req.body.stars
     const content = req.body.content
 
-    // ! ISSO PRECISA ESTAR NÃO COMENTADO!!
-    //if (reviewer_id == reviewed_id) {
-    //    return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
-    //}
+    if (reviewer_id == reviewed_id) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    }
 
     const newReview = await UserController.createReview(stars, content, reviewed_id, reviewer_id)
 

@@ -254,7 +254,7 @@ router.get('/get-user', verifyJWT, async (req, res) => {
     const foundUser = await UserController.getUser(user_id)
 
     const isProInvested = await checkPro(['Investido'], user_id)
-    const isProProfessional = await checkPro(['Investido'], user_id)
+    const isProProfessional = await checkPro(['Profissional'], user_id)
 
     return res.json({type: 'success', message: 'Usuário encontrado', data: {
         foundUser: foundUser,

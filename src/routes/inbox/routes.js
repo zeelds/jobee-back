@@ -27,12 +27,12 @@ router.post('/create-inbox', verifyJWT, async(req,res)=>{
 })
 
 
-router.get('/delete-inbox', verifyJWT, async(req,res)=>{
+router.post('/delete-inbox', verifyJWT, async(req,res)=>{
 
     const user_id = req.user_id
     const id = req.body.id
 
-    const deletedInbox = await InboxController.getAllInbox({where: {target_id: user_id, id: id}})
+    const deletedInbox = await InboxController.deleteInbox({target_id: user_id, id: id})
 
     return res.json(deletedInbox)
 

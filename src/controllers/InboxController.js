@@ -22,9 +22,9 @@ module.exports = {
     },
     async deleteInbox(values){
 
-        const {id} = values
+        const {id, target_id} = values
 
-        const deletedInbox = await Inbox.destroy({where: {id: id}})
+        const deletedInbox = await Inbox.destroy({where: {id: id, target_id: target_id}})
 
         return deletedInbox
 

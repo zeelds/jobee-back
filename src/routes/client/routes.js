@@ -313,9 +313,10 @@ router.post('/write-review', verifyJWT, async (req, res) => {
     const stars = req.body.stars
     const content = req.body.content
 
-    if (reviewer_id == reviewed_id) {
-        return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
-    }
+    // ! ISSO PRECISA ESTAR NÃO COMENTADO!!
+    //if (reviewer_id == reviewed_id) {
+    //    return res.json({ type: 'error', message: 'Ocorreu algum erro no envio da avaliação.' })
+    //}
 
     const newReview = await UserController.createReview(stars, content, reviewed_id, reviewer_id)
 

@@ -197,6 +197,21 @@ router.get('/get-accessibility', verifyJWT, async (req, res) => {
 
 })
 
+
+router.get('/get-accessibility/:id', async (req, res) => {
+
+    const user_id = req.params.id
+
+    const foundAccessibility = await UserController.getAccessibility(user_id)
+
+    if (foundAccessibility.data == 0) {
+        return res.json({ type: 'error', message: 'Ocorreu algum erro na busca de acessibilidade.' })
+    }
+
+    return res.json({ type: 'success', message: 'A acessibilidade foi buscada.', data: foundAccessibility })
+
+})
+
 router.post('/redefine-user', verifyJWT, async (req, res) => {
 
     const { name, avatar, title, biography, gender, birthday, contact, tags } = req.body

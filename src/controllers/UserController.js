@@ -45,7 +45,7 @@ module.exports = {
 
     async getAllReviews(reviewed_id){
 
-        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}})
+        const foundReviews = await Review.findAll({where: {reviewed_id: reviewed_id}, order: [['created_at', 'desc']]})
 
         return {data: foundReviews, message: 'Busca finalizada com sucesso!', status:200}
 

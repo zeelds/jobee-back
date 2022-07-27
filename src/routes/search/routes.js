@@ -3,16 +3,18 @@ const ArticleController = require('../../controllers/ArticleController')
 const UserController = require('../../controllers/UserController')
 const router = express()
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
 
-    const searchTerms = ['Biluga', 'piroca']
+    if(!req.body.searchTerms) return res.json({})
+
+    const searchTerms = req.body.searchTerms
 
     const allUsers = await UserController.safelyGetAllUsers()
     const allArticles = await ArticleController.safelyGetAllArticles()
 
     const filteredUsers = await Promise.all(
         allUsers.filter((elem) => {
-            if (searchTerms.some(term => JSON.stringify(elem).includes(term))) {
+            if (searchTerms.some(term => JSON.stringify(elem).toLowerCase().includes(term.toLowerCase()))) {
                 return true
             } else {
                 return false

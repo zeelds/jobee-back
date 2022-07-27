@@ -16,7 +16,7 @@ module.exports = {
 
     async safelyGetAllUsers(){
 
-        const Users = await User.findAll({attributes: ['id', 'name', 'title', 'biography', 'contact']})
+        const Users = await User.findAll({attributes: ['id', 'avatar', 'name', 'title', 'biography', 'contact']})
 
         return Users
 

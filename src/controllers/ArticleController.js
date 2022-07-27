@@ -34,6 +34,14 @@ module.exports = {
 
     },
 
+    async safelyGetAllArticles(author_id){
+
+        const foundArticle = await Article.findAll({attributes: ['id','title','content','tags'], order: [['created_at', 'desc']]})
+
+        return foundArticle
+
+    },
+
     async updateArticle(id, title, content, status, tags, user_id){
 
         const newArticle = await Article.update({

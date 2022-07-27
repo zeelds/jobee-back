@@ -14,6 +14,14 @@ module.exports = {
 
     },
 
+    async safelyGetAllUsers(){
+
+        const Users = await User.findAll({attributes: ['id', 'name', 'title', 'biography', 'contact']})
+
+        return Users
+
+    },
+
     async createReview(stars, content, reviewed_id, reviewer_id){
 
         const newReview = await Review.create({

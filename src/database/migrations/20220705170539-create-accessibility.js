@@ -25,14 +25,6 @@ module.exports = {
       user_id: {
         type: Sequelize.UUID
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

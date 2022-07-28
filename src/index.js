@@ -27,8 +27,8 @@ app.use('/client', clientRoutes)
 app.use('/article', articleRoutes)
 app.use('/payment', paymentRoutes)
 
-app.listen(process.env.SERVER_PORT, () => {
-    console.log(`Servidor iniciado na porta ${process.env.SERVER_PORT}`)
+app.listen(process.env.PORT, '0.0.0.0', () => {
+    console.log(`Servidor iniciado na porta ${process.env.PORT}`)
 })
 
 //O server será iniciado aqui

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
-const Login = database.define("Login", {
+const Login = database.define("login", {
     email: {
         type: DataTypes.STRING,
         allowNull: false,

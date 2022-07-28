@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
-const Review = database.define('Review', {
+const Review = database.define('review', {
     id: {
         type: DataTypes.UUID,
         allowNull: false,

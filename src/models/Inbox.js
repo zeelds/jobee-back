@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const database = require('../database/db')
 
-const Inbox = database.define('Inbox', {
+const Inbox = database.define('inbox', {
     id: {
         type: DataTypes.UUID,
         allowNull: false,

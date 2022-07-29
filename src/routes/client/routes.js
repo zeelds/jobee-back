@@ -110,13 +110,15 @@ router.get('/verify/:token', async (req, res) => {
 
     const token = req.params.token
 
-    const user_id = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+    const user_id = await jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
         if (err) {
-            return res.json('Esse código de verificação expirou...')
+            return ""
         }
 
         return decoded.verify_user_id
     })
+
+    if(!user_id) return res.json({ type: 'error', message: 'Essa conta não pôde ser verificada no momento.' })
 
     const updatedVerify = await UserController.updateVerifiedStatus({ isverified: true, user_id: user_id.toString() })
     await InboxController.createInbox(

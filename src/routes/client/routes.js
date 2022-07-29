@@ -139,7 +139,7 @@ router.post('/upload-avatar', upload.single('avatar'), verifyJWT, async (req, re
 
     const user_id = req.user_id
 
-    const isPro = await checkPro(['Investido', 'Profissional', 'Padrão'], user_id)
+    const isPro = await checkPro(['Investido', 'Profissional'], user_id)
 
     if (
         isPro == false

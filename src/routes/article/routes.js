@@ -123,7 +123,7 @@ router.post('/update-comment', verifyJWT, async (req,res) => {
     const {id,content} = req.body
     const user_id = req.user_id
 
-    const isAllowed = checkPro(mustBe=['Padrão', 'Profissional','Investido'], user_id=user_id)
+    const isAllowed = checkPro(mustBe=['Profissional','Investido'], user_id=user_id)
 
     if(!isAllowed){
         return res.json({type: 'error', message: 'Você deve ser um Usuário Pro!', status: 200})

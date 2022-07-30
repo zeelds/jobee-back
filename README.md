@@ -67,7 +67,7 @@ Se você deseja visualizar a organização do projeto em nosso Trello, você pod
 -   **[E-Mail Validator](https://www.npmjs.com/package/email-validator)**
 -   **[dotENV](https://github.com/motdotla/dotenv)**
 -   **[Multer](https://github.com/expressjs/multer)**
--   **[Nodemailer](https://github.com/expressjs/multer)**
+-   **[Nodemailer](https://www.npmjs.com/package/nodemailer)**
 
 > Veja o arquivo  [package.json](https://github.com/Girl-React/jobee-back/blob/main/package.json)
 

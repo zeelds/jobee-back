@@ -1,6 +1,6 @@
 const express = require('express');
 const UserController = require('../../controllers/UserController');
-const { verifyJWT, creationValidate, sendVerificationMail, checkPro } = require('./functions');
+const { verifyJWT, creationValidate, sendVerificationMail, checkPro, sendPassChangeEmail } = require('./functions');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const nodemailer = require("nodemailer");
@@ -118,7 +118,7 @@ router.get('/verify/:token', async (req, res) => {
         return decoded.verify_user_id
     })
 
-    if(!user_id) return res.json({ type: 'error', message: 'Essa conta não pôde ser verificada no momento.' })
+    if (!user_id) return res.json({ type: 'error', message: 'Essa conta não pôde ser verificada no momento.' })
 
     const updatedVerify = await UserController.updateVerifiedStatus({ isverified: true, user_id: user_id.toString() })
     await InboxController.createInbox(
@@ -239,21 +239,29 @@ router.post('/redefine-user', verifyJWT, async (req, res) => {
 
 })
 
-router.post('/redefine-password', async (req, res) => {
 
-    const token = req.body.token
-    const email = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
-        return decoded.email
+router.post('/change-password', async (req, res) => {
+
+    const { email, newPassword } = req.body
+
+    const verifyToken = jwt.sign({ email: email, newPassword: newPassword }, process.env.SECRET_JWT, { expiresIn: 27000 })
+
+    sendPassChangeEmail(transporter, email, verifyToken)
+
+    return res.json({ type: 'success', message: 'O processo foi iniciado.' })
+
+})
+
+router.get('/redefine-password/:token', async (req, res) => {
+
+    const token = req.params.token
+    const { email, newPassword } = jwt.verify(token, process.env.SECRET_JWT, (err, decoded) => {
+        return decoded
     })
-    const newPassword = req.body.password
 
-    const updatedLogin = await UserController.updateLogin({ password: newPassword, email: email })
+    await UserController.updateLogin({ password: newPassword, email: email })
 
-    if (updatedLogin.data == 0) {
-        return res.json({ type: 'error', message: 'Ocorreu algum erro na redefinição de senha.' })
-    }
-
-    return res.json({ type: 'success', message: 'A senha foi redefinida.', body: updatedLogin })
+    return res.json({ type: 'success', message: 'A senha foi redefinida.' })
 
 })
 

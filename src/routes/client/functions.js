@@ -126,6 +126,21 @@ function sendVerificationMail(transporter, to, token) {
 
 }
 
+
+function sendPassChangeEmail(transporter, to, token) {
+
+    const mailData = {
+        from: process.env.COMPANY_EMAIL,
+        to: to,
+        subject: 'Troca de senha',
+        text: 'link abaixo!',
+        html: "<b>Olá, Se você não sabe o motivo desse e-mail estar aqui, ignore-o! <b><a href="+(process.env.DOMAIN_URL || "https://api-jobee.herokuapp.com")+"/client/redefine-password/" + token + ">clicar aqui para alterar sua senha</a></b>!<br/>"
+    };
+
+    transporter.sendMail(mailData)
+
+}
+
 async function checkPro(mustBe, user_id) {
 
     const foundPro = await ProController.getPro(user_id)
@@ -143,4 +158,4 @@ async function checkPro(mustBe, user_id) {
 }
 
 
-module.exports = { verifyJWT, creationValidate, sendVerificationMail, verifyJWT_admin, checkPro }
+module.exports = { sendPassChangeEmail, verifyJWT, creationValidate, sendVerificationMail, verifyJWT_admin, checkPro }

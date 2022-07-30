@@ -134,7 +134,7 @@ function sendPassChangeEmail(transporter, to, token) {
         to: to,
         subject: 'Troca de senha',
         text: 'link abaixo!',
-        html: "<b>Olá, Se você não sabe o motivo desse e-mail estar aqui, ignore-o! <b><a href="+(process.env.DOMAIN_URL || "https://api-jobee.herokuapp.com")+"/client/redefine-password/" + token + ">clicar aqui para alterar sua senha</a></b>!<br/>"
+        html: "<b>Olá, Se você não sabe o motivo desse e-mail estar aqui, ignore-o! <b><a href="+(process.env.DOMAIN_URL || "https://api-jobee.herokuapp.com")+"/client/redefine-password/" + token + ">Clique aqui para alterar sua senha</a></b>!<br/>"
     };
 
     transporter.sendMail(mailData)

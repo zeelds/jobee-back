@@ -28,7 +28,7 @@ Projeto desenvolvido durante o **Start** oferecido pela Rede Cidadã.
 	- [x] se o mesmo precisa de um auxílio para tornar a aplicação mais acessível
 
 - [x] Os usuários podem ingressar na plataforma ao enviar:
-	- [x] dados cadastrais básicos, como e-mail, senha, nome, gênero, etc;
+	- [x] dados cadastrais básicos, como e-mail, senha, nome, gênero, etc
 
 - [x] Os usuários conseguem publicar artigos onde podem:
 	- [x] divulgar oportunidades de emprego;
@@ -40,7 +40,7 @@ Projeto desenvolvido durante o **Start** oferecido pela Rede Cidadã.
 	- [x] contactar o autor através das informações de contato;
 	- [x] enviar uma avaliação para aquele perfil;
 	- [x] analisar seu histórico;
-	- [x] ver seus pronomes de preferência;
+	- [x] ver seus pronomes de preferência
 
 ## ![symbol](https://user-images.githubusercontent.com/98771718/177051496-37b41aed-0ca1-4c26-832d-54e8c6dea11f.png) Modelo de desenvolvimento
 
